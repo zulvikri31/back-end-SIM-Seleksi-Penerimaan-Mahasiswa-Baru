@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- 1. ENUM ROLE ---
+enum Role {
+  ADMIN
+  CAMABA
+}
+
+// --- 2. TABEL USER (AKUN LOGIN) ---
+model User {
+  id        Int        @id @default(autoincrement())
+  nama      String
+  email     String     @unique
+  password  String
+  role      Role       @default(CAMABA)
+  isActive  Boolean    @default(false) // Untuk Kartu Biru: Akun Aktif / Belum Aktif
+  createdAt DateTime   @default(now())
+
+  // Relasi One-to-One ke Pendaftar
+  pendaftar Pendaftar?
+}
+
+// --- 3. TABEL MASTER / REFERENSI (FILTER DROPDOWN DASHBOARD) ---
+model Periode {
+  id        Int         @id @default(autoincrement())
+  nama      String      // Contoh: "2027 Genap"
+  isActive  Boolean     @default(true)
+  
+  // Relasi One-to-Many: 1 Periode punya BANYAK Pendaftar
+  pendaftar Pendaftar[]
+}
+
+model Gelombang {
+  id        Int         @id @default(autoincrement())
+  nama      String      // Contoh: "Gelombang 1"
+  pendaftar Pendaftar[]
+}
+
+model JalurPendaftaran {
+  id        Int         @id @default(autoincrement())
+  nama      String      // Contoh: "Reguler", "RPL"
+  pendaftar Pendaftar[]
+}
+
+model SistemKuliah {
+  id        Int         @id @default(autoincrement())
+  nama      String      // Contoh: "Reguler Pagi", "Karyawan"
+  pendaftar Pendaftar[]
+}
+
+model ProgramStudi {
+  id        Int         @id @default(autoincrement())
+  namaProdi String      // Contoh: "Teknik Informatika"
+  jenjang   String      // Contoh: "S1", "S2"
+  pendaftar Pendaftar[]
+}
+
+// --- 4. TABEL TRANSAKSI UTAMA (PENDAFTAR) ---
+model Pendaftar {
+  id                 Int              @id @default(autoincrement())
+  
+  // Foreign Key One-to-One ke User (Pakai @unique)
+  userId             Int              @unique
+  user               User             @relation(fields: [userId], references: [id])
+
+  // Foreign Key One-to-Many ke Tabel Master (Tanpa @unique)
+  periodeId          Int
+  periode            Periode          @relation(fields: [periodeId], references: [id])
+  
+  gelombangId        Int
+  gelombang          Gelombang        @relation(fields: [gelombangId], references: [id])
+  
+  jalurPendaftaranId Int
+  jalurPendaftaran   JalurPendaftaran @relation(fields: [jalurPendaftaranId], references: [id])
+  
+  sistemKuliahId     Int
+  sistemKuliah       SistemKuliah     @relation(fields: [sistemKuliahId], references: [id])
+  
+  programStudiId     Int
+  programStudi       ProgramStudi     @relation(fields: [programStudiId], references: [id])
+
+  // Status untuk Kartu Hijau, Oranye, dan Merah di Dashboard Admin
+  isFinalisasi       Boolean          @default(false)
+  isDiterima         Boolean          @default(false)
+  isDaftarUlang      Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+}
