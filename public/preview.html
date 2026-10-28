@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin SIM SPMB - Universitas Ibn Khaldun Bogor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --uika-teal: #0284c7;
+      --uika-dark: #0369a1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation UIKA Style */
+    .top-navbar {
+      background: #0284c7;
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: white;
+      color: #0284c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .brand-text h1 {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: #0284c7;
+      font-weight: 700;
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      background: #38bdf8;
+      border-radius: 50%;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .main-content {
+      padding: 24px;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Common Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Filter Toolbar */
+    .filter-toolbar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 20px;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .filter-item label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    select, input[type="text"] {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-success { background: #10b981; }
+    .btn-success:hover { background: #059669; }
+    .btn-warning { background: #f59e0b; color: #000; }
+    .btn-warning:hover { background: #d97706; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text);
+    }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    thead {
+      background: #0284c7;
+      color: white;
+    }
+
+    th {
+      padding: 10px 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--card-border);
+      color: #cbd5e1;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .badge-info { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+    /* KPI Summary Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--primary));
+    }
+
+    .kpi-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+      color: #fff;
+    }
+
+    /* Charts */
+    .chart-grid-2 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+    }
+
+    /* Funnel Stages List */
+    .funnel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .funnel-item {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 8px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .funnel-bar-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, rgba(2, 132, 199, 0.3), rgba(168, 85, 247, 0.3));
+      z-index: 1;
+      transition: width 0.6s ease;
+    }
+
+    .funnel-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Login As Card (Screenshot 5) */
+    .login-as-card {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 760px;
+      margin: 0 auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .login-as-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .camaba-photo {
+      width: 140px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 3px solid #e2e8f0;
+      background: #f1f5f9;
+    }
+
+    .camaba-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 140px 10px 1fr;
+      align-items: flex-start;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .detail-val-id {
+      color: #16a34a;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .detail-val-name {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .prodi-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13.5px;
+      color: #334155;
+    }
+
+    .btn-login-as {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-login-as:hover {
+      background: #15803d;
+    }
+
+    /* Kop Surat UIKA (Screenshot 4) */
+    .kop-surat {
+      background: #ffffff;
+      color: #000;
+      padding: 24px 30px;
+      border-bottom: 3px double #000;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .kop-logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+
+    .kop-text {
+      text-align: center;
+      flex: 1;
+    }
+
+    .kop-text h2 { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
+    .kop-text h3 { font-size: 15px; font-weight: 700; margin: 2px 0; }
+    .kop-text p { font-size: 12px; color: #475569; }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar UIKA SPMB -->
+  <nav class="top-navbar">
+    <div class="brand-section">
+      <div class="brand-logo">U</div>
+      <div class="brand-text">
+        <h1>SIM SELEKSI PENERIMAAN MAHASISWA BARU</h1>
+        <p>Universitas Ibn Khaldun Bogor</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+      <button class="tab-btn" onclick="switchTab('kelulusan')">🎓 Kelulusan</button>
+      <button class="tab-btn" onclick="switchTab('referensi')">📋 Referensi</button>
+      <button class="tab-btn" onclick="switchTab('laporan')">📑 Laporan UKT</button>
+      <button class="tab-btn" onclick="switchTab('loginas')">👤 Login As</button>
+    </div>
+
+    <div class="user-badge">
+      <div class="user-avatar">ZU</div>
+      <span>Admin PMB</span>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+
+    <!-- ==================== TAB 1: DASHBOARD ==================== -->
+    <div id="tab-dashboard" class="tab-pane active">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 22px; font-weight: 800;">Dashboard Analisis & KPI PMB</h2>
+          <p style="color: var(--text-muted); font-size: 13px;">Statistik pendaftar, konversi funnel 8 tahap, dan sebaran demografis</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <select id="periodeDashboardSelect" onchange="loadDashboardData()"></select>
+          <button class="btn" onclick="loadDashboardData()">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--card-accent: #3b82f6;"><div class="kpi-title">Peminat</div><div class="kpi-value" id="kpiPeminat">-</div></div>
+        <div class="kpi-card" style="--card-accent: #60a5fa;"><div class="kpi-title">Pendaftar</div><div class="kpi-value" id="kpiPendaftar">-</div></div>
+        <div class="kpi-card" style="--card-accent: #38bdf8;"><div class="kpi-title">Biodata Lengkap</div><div class="kpi-value" id="kpiBiodata">-</div></div>
+        <div class="kpi-card" style="--card-accent: #f59e0b;"><div class="kpi-title">Finalisasi</div><div class="kpi-value" id="kpiFinalisasi">-</div></div>
+        <div class="kpi-card" style="--card-accent: #8b5cf6;"><div class="kpi-title">Ikut Seleksi</div><div class="kpi-value" id="kpiSeleksi">-</div></div>
+        <div class="kpi-card" style="--card-accent: #10b981;"><div class="kpi-title">Lulus</div><div class="kpi-value" id="kpiLulus">-</div></div>
+        <div class="kpi-card" style="--card-accent: #06b6d4;"><div class="kpi-title">Daftar Ulang</div><div class="kpi-value" id="kpiDaftarUlang">-</div></div>
+        <div class="kpi-card" style="--card-accent: #ec4899;"><div class="kpi-title">Generate NIM</div><div class="kpi-value" id="kpiNim">-</div></div>
+      </div>
+
+      <!-- Row 1: Funnel & Monthly Trend -->
+      <div class="chart-grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>Funnel 8 Tahapan PMB</span>
+            <span class="badge badge-info">Conversion Rate</span>
+          </div>
+          <div class="funnel-list" id="funnelContainer"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Frekuensi Bulanan</span>
+            <span class="badge badge-info">Trend Line</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Sumber Trafik & Demografi -->
+      <div class="chart-grid-3">
+        <div class="card">
+          <div class="card-title"><span>Sumber Trafik</span></div>
+          <div class="chart-container"><canvas id="trafficChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>Jenis Kelamin</span></div>
+          <div class="chart-container"><canvas id="genderChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>Tahun Lulus Sekolah</span></div>
+          <div class="chart-container"><canvas id="graduationChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: KELULUSAN (SCREENSHOT 1) ==================== -->
+    <div id="tab-kelulusan" class="tab-pane">
+      <div class="card-title">
+        <div>
+          <h2>Kelulusan &gt; Rekomendasi Prodi</h2>
+          <p style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 4px;">Penetapan kelulusan program studi, persetujuan cadangan (SET), dan pengiriman email hasil seleksi</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-warning" onclick="openBatchKelulusanModal()">⚡ Batch Tetapkan Kelulusan</button>
+        </div>
+      </div>
+
+      <!-- Filter Bar Sesuai Screenshot 1 -->
+      <div class="filter-toolbar">
+        <div class="filter-item">
+          <label>Periode</label>
+          <select id="kelPeriode" onchange="loadKelulusan()"></select>
+        </div>
+        <div class="filter-item">
+          <label>Gelombang</label>
+          <select id="kelGelombang" onchange="loadKelulusan()"><option value="">-- Semua Gelombang --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Jalur</label>
+          <select id="kelJalur" onchange="loadKelulusan()"><option value="">-- Semua Jalur --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Sistem Kuliah</label>
+          <select id="kelSistem" onchange="loadKelulusan()"><option value="">-- Semua Sistem --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Program Studi</label>
+          <select id="kelProdi" onchange="loadKelulusan()"><option value="">-- Semua Prodi --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Status Lulusan</label>
+          <select id="kelStatus" onchange="loadKelulusan()">
+            <option value="all">-- Semua Status --</option>
+            <option value="LULUS">LULUS</option>
+            <option value="CADANGAN">CADANGAN</option>
+            <option value="TIDAK_LULUS">TIDAK LULUS</option>
+            <option value="MENUNGGU">MENUNGGU</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>Pilihan Prodi</label>
+          <select id="kelPilihan" onchange="loadKelulusan()">
+            <option value="">-- Semua Pilihan --</option>
+            <option value="1">Pilihan 1</option>
+            <option value="2">Pilihan 2</option>
+            <option value="3">Pilihan 3</option>
+          </select>
+        </div>
+        <div class="filter-item" style="grid-column: span 2;">
+          <label>Cari Kelulusan</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="kelSearch" placeholder="Cari Nama / No Pendaftaran / No Ujian..." style="flex: 1;" onkeyup="if(event.key==='Enter') loadKelulusan()">
+            <button class="btn btn-success" onclick="loadKelulusan()">🔍 Cari</button>
+            <button class="btn btn-outline" onclick="loadKelulusan()">🔄 Refresh</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keterangan Status -->
+      <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; color: #fbbf24;">
+        <b>Keterangan:</b> <code>SET</code> = Cadangan Disetujui Prodi. Calon mahasiswa dengan badge SET dapat langsung melanjutkan ke daftar ulang.
+      </div>
+
+      <!-- Table Kelulusan (Screenshot 1) -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th width="30"><input type="checkbox" id="checkAllKelulusan" onclick="toggleAllKelulusan(this)"></th>
+              <th width="40">No.</th>
+              <th>Pendaftar</th>
+              <th>Nomor Ujian</th>
+              <th>PIL</th>
+              <th>Program Studi</th>
+              <th>Seleksi</th>
+              <th>Nilai</th>
+              <th>Email Terkirim?</th>
+              <th>PJ Cadangan</th>
+              <th>SET</th>
+              <th>Status Lulusan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="kelulusanTableBody">
+            <tr><td colspan="13" style="text-align: center; padding: 20px;">Memuat data kelulusan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: REFERENSI (SCREENSHOT 2 & 3) ==================== -->
+    <div id="tab-referensi" class="tab-pane">
+      <div class="card-title">
+        <div>
+          <h2>Referensi &gt; Pendaftaran &amp; Dokumen RPL</h2>
+          <p style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 4px;">Data master gelombang, jalur pendaftaran, sistem kuliah, dan berkas RPL</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+        <!-- Gelombang (Screenshot 2) -->
+        <div class="card">
+          <div class="card-title"><span>Tabel Gelombang Pendaftaran</span></div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="80">Kode</th>
+                  <th>Nama Gelombang</th>
+                </tr>
+              </thead>
+              <tbody id="gelombangTableBody">
+                <tr><td colspan="2" style="text-align: center;">Memuat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Jalur Pendaftaran -->
+        <div class="card">
+          <div class="card-title"><span>Jalur Pendaftaran</span></div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="80">ID</th>
+                  <th>Nama Jalur</th>
+                  <th>Deskripsi</th>
+                </tr>
+              </thead>
+              <tbody id="jalurTableBody">
+                <tr><td colspan="3" style="text-align: center;">Memuat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sistem Kuliah -->
+        <div class="card">
+          <div class="card-title"><span>Sistem Kuliah</span></div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="80">ID</th>
+                  <th>Nama Sistem Kuliah</th>
+                </tr>
+              </thead>
+              <tbody id="sistemTableBody">
+                <tr><td colspan="2" style="text-align: center;">Memuat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dokumen RPL -->
+        <div class="card">
+          <div class="card-title"><span>Jenis Dokumen RPL</span></div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode</th>
+                  <th>Nama Dokumen</th>
+                  <th width="80">Wajib</th>
+                </tr>
+              </thead>
+              <tbody id="rplDocTableBody">
+                <tr><td colspan="3" style="text-align: center;">Memuat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: LAPORAN UKT (SCREENSHOT 4) ==================== -->
+    <div id="tab-laporan" class="tab-pane">
+      <div class="card-title">
+        <div>
+          <h2>Laporan &gt; Laporan UKT Pendaftar</h2>
+          <p style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 4px;">Rekapitulasi penetapan kelompok dan nominal Uang Kuliah Tunggal calon mahasiswa</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-outline" onclick="window.print()">🖨️ Cetak / PDF</button>
+        </div>
+      </div>
+
+      <!-- Filter Toolbar Sesuai Screenshot 4 -->
+      <div class="filter-toolbar">
+        <div class="filter-item">
+          <label>Periode</label>
+          <select id="lapPeriode" onchange="loadLaporanUkt()"></select>
+        </div>
+        <div class="filter-item">
+          <label>Jalur</label>
+          <select id="lapJalur" onchange="loadLaporanUkt()"><option value="">-- Semua Jalur --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Gelombang</label>
+          <select id="lapGelombang" onchange="loadLaporanUkt()"><option value="">-- Semua Gelombang --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Sistem Kuliah</label>
+          <select id="lapSistem" onchange="loadLaporanUkt()"><option value="">-- Semua Sistem --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Prodi Diterima</label>
+          <select id="lapProdi" onchange="loadLaporanUkt()"><option value="">-- Pilih Prodi Diterima --</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Kelompok UKT</label>
+          <select id="lapKelompok" onchange="loadLaporanUkt()">
+            <option value="all">-- Semua Kelompok UKT --</option>
+            <option value="KIP-Kuliah">KIP-Kuliah</option>
+            <option value="UKT 1">UKT 1</option>
+            <option value="UKT 2">UKT 2</option>
+            <option value="UKT 3">UKT 3</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>Format</label>
+          <select id="lapFormat"><option value="HTML">HTML</option><option value="PDF">PDF</option></select>
+        </div>
+        <div class="filter-item" style="justify-content: flex-end;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="lapKop" checked onchange="toggleKop(this.checked)"> Gunakan KOP Surat
+          </label>
+        </div>
+      </div>
+
+      <!-- Paper Container for Report -->
+      <div style="background: white; color: #1e293b; border-radius: 8px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+        <!-- KOP Surat -->
+        <div class="kop-surat" id="kopSuratElem">
+          <div style="width: 70px; height: 70px; background: #0284c7; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 32px;">U</div>
+          <div class="kop-text">
+            <h2>UNIVERSITAS IBN KHALDUN BOGOR</h2>
+            <h3>SELEKSI PENERIMAAN MAHASISWA BARU (SPMB)</h3>
+            <p>Jl. KH. Sholeh Iskandar Km. 2, Kedung Badak, Tanah Sareal, Kota Bogor 16162 | Telp: (0251) 8356884</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h3 style="font-size: 16px; font-weight: 800; text-decoration: underline;">LAPORAN PENETAPAN UKT PENDAFTAR MAHASISWA BARU</h3>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Tanggal Cetak: <span id="lapTanggalCetak">-</span> | Total Mahasiswa: <b id="lapTotalCount">0</b></p>
+        </div>
+
+        <!-- Table Laporan UKT -->
+        <div class="table-container" style="border: 1px solid #cbd5e1;">
+          <table style="color: #1e293b;">
+            <thead style="background: #0284c7; color: white;">
+              <tr>
+                <th width="40">No.</th>
+                <th>ID Pendaftar</th>
+                <th>Nama Mahasiswa</th>
+                <th>Program Studi</th>
+                <th>Jalur Pendaftaran</th>
+                <th>Kelompok UKT</th>
+                <th>Nominal UKT</th>
+                <th>Status Pembayaran</th>
+              </tr>
+            </thead>
+            <tbody id="laporanTableBody">
+              <tr><td colspan="8" style="text-align: center; padding: 20px;">Memuat data laporan...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: LOGIN AS (SCREENSHOT 5) ==================== -->
+    <div id="tab-loginas" class="tab-pane">
+      <div class="card-title">
+        <div>
+          <h2>Login As &gt; Akun Camaba SPMB</h2>
+          <p style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 4px;">Fitur otentikasi impersonasi admin ke portal calon mahasiswa baru</p>
+        </div>
+      </div>
+
+      <!-- Search Box Sesuai Screenshot 5 -->
+      <div class="card" style="max-width: 760px; margin: 0 auto 24px auto;">
+        <label style="font-size: 13px; color: var(--warning); font-weight: 700; margin-bottom: 8px; display: block; text-align: center;">
+          Nama / ID Pendaftar
+        </label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="loginAsSearchInput" placeholder="Contoh: 4102541051 - ROSIANA AYU DWI APRILIANI" style="flex: 1;" value="4102541051 - ROSIANA AYU DWI APRILIANI" onkeyup="if(event.key==='Enter') executeSearchLoginAs()">
+          <button class="btn" style="background: #1d4ed8;" onclick="executeSearchLoginAs()">🔍 Cari</button>
+        </div>
+      </div>
+
+      <!-- Hasil Kartu Pendaftar Sesuai Screenshot 5 -->
+      <div id="loginAsResultContainer">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+
+      if (tabId === 'kelulusan') loadKelulusan();
+      if (tabId === 'referensi') loadReferensi();
+      if (tabId === 'laporan') loadLaporanUkt();
+      if (tabId === 'loginas') executeSearchLoginAs();
+    }
+
+    // ==================== DASHBOARD TAB ====================
+    let chartsInstance = {};
+    async function loadDashboardData() {
+      const select = document.getElementById('periodeDashboardSelect');
+      const kode = select.value;
+      const url = kode ? `/api/admin/dashboard/charts?kodePeriode=${encodeURIComponent(kode)}` : `/api/admin/dashboard/charts`;
+
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+
+        const data = json.data;
+
+        // Dropdown periode
+        if (select.options.length === 0) {
+          data.filter.daftarPeriode.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.kode;
+            opt.textContent = `${p.nama} (${p.kode})`;
+            if (p.id === data.filter.selectedPeriode?.id) opt.selected = true;
+            select.appendChild(opt);
+          });
+        }
+
+        // KPIs
+        const kpis = data.kpiSummary;
+        document.getElementById('kpiPeminat').textContent = kpis.peminat;
+        document.getElementById('kpiPendaftar').textContent = kpis.pendaftar;
+        document.getElementById('kpiBiodata').textContent = kpis.biodataLengkap;
+        document.getElementById('kpiFinalisasi').textContent = kpis.finalisasi;
+        document.getElementById('kpiSeleksi').textContent = kpis.ikutSeleksi;
+        document.getElementById('kpiLulus').textContent = kpis.lulus;
+        document.getElementById('kpiDaftarUlang').textContent = kpis.daftarUlang;
+        document.getElementById('kpiNim').textContent = kpis.generateNim;
+
+        // Funnel
+        const funnelList = document.getElementById('funnelContainer');
+        funnelList.innerHTML = '';
+        data.funnelStages.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'funnel-item';
+          item.innerHTML = `
+            <div class="funnel-bar-bg" style="width: ${s.persentase}%;"></div>
+            <div class="funnel-content">
+              <span class="funnel-stage-name">${s.nomor}. ${s.namaTahap}</span>
+              <div>
+                <b style="color: #fff; font-size: 14px;">${s.jumlah}</b>
+                <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${s.persentase}%)</span>
+              </div>
+            </div>
+          `;
+          funnelList.appendChild(item);
+        });
+
+        // Charts
+        renderMonthlyChart(data.charts.trenBulanan);
+        renderTrafficChart(data.charts.sumberTrafik);
+        renderGenderChart(data.charts.jenisKelamin);
+        renderGraduationChart(data.charts.tahunLulus);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderMonthlyChart(monthly) {
+      const ctx = document.getElementById('monthlyChart').getContext('2d');
+      if (chartsInstance.monthly) chartsInstance.monthly.destroy();
+      chartsInstance.monthly = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: monthly.labels,
+          datasets: [
+            { label: 'Pendaftar', data: monthly.datasets.pendaftar, borderColor: '#3b82f6', tension: 0.3, fill: false },
+            { label: 'Lulus', data: monthly.datasets.lulus, borderColor: '#10b981', tension: 0.3, fill: false },
+            { label: 'Daftar Ulang', data: monthly.datasets.daftarUlang, borderColor: '#06b6d4', tension: 0.3, fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    function renderTrafficChart(traffic) {
+      const ctx = document.getElementById('trafficChart').getContext('2d');
+      if (chartsInstance.traffic) chartsInstance.traffic.destroy();
+      chartsInstance.traffic = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: traffic.labels,
+          datasets: [{ data: traffic.data, backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#64748b'], borderWidth: 0 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 10 } } } }
+      });
+    }
+
+    function renderGenderChart(gender) {
+      const ctx = document.getElementById('genderChart').getContext('2d');
+      if (chartsInstance.gender) chartsInstance.gender.destroy();
+      chartsInstance.gender = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: gender.labels,
+          datasets: [{ data: gender.data, backgroundColor: ['#3b82f6', '#ec4899'], borderWidth: 0 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1' } } } }
+      });
+    }
+
+    function renderGraduationChart(grad) {
+      const ctx = document.getElementById('graduationChart').getContext('2d');
+      if (chartsInstance.grad) chartsInstance.grad.destroy();
+      chartsInstance.grad = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: grad.labels,
+          datasets: [{ label: 'Jumlah', data: grad.data, backgroundColor: '#8b5cf6', borderRadius: 4 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
+    // ==================== TAB 2: KELULUSAN ====================
+    async function loadKelulusan() {
+      const params = new URLSearchParams();
+      const p = document.getElementById('kelPeriode').value;
+      const g = document.getElementById('kelGelombang').value;
+      const j = document.getElementById('kelJalur').value;
+      const s = document.getElementById('kelSistem').value;
+      const pr = document.getElementById('kelProdi').value;
+      const st = document.getElementById('kelStatus').value;
+      const pil = document.getElementById('kelPilihan').value;
+      const q = document.getElementById('kelSearch').value;
+
+      if (p) params.append('periodeId', p);
+      if (g) params.append('gelombangId', g);
+      if (j) params.append('jalurPendaftaranId', j);
+      if (s) params.append('sistemKuliahId', s);
+      if (pr) params.append('programStudiId', pr);
+      if (st) params.append('statusKelulusan', st);
+      if (pil) params.append('pilihan', pil);
+      if (q) params.append('search', q);
+
+      try {
+        const res = await fetch(`/api/admin/kelulusan/rekomendasi-prodi?${params.toString()}`);
+        const json = await res.json();
+        const tbody = document.getElementById('kelulusanTableBody');
+        tbody.innerHTML = '';
+
+        if (!json.data || json.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 24px; color: var(--text-muted);">Data kelulusan tidak ditemukan.</td></tr>';
+          return;
+        }
+
+        json.data.forEach((row, i) => {
+          const badgeStatus = row.statusLulusan === 'LULUS'
+            ? '<span class="badge badge-success">LULUS</span>'
+            : row.statusLulusan === 'CADANGAN'
+            ? '<span class="badge badge-warning">CADANGAN</span>'
+            : row.statusLulusan === 'TIDAK_LULUS'
+            ? '<span class="badge badge-danger">TIDAK LULUS</span>'
+            : '<span class="badge badge-info">MENUNGGU</span>';
+
+          const setBadge = row.set
+            ? '<span class="badge badge-success" style="cursor: pointer;" onclick="toggleSetCadangan(' + row.id + ', false)">✔ SET</span>'
+            : '<span class="badge badge-outline" style="cursor: pointer; opacity: 0.6;" onclick="toggleSetCadangan(' + row.id + ', true)">-</span>';
+
+          const emailBadge = row.emailTerkirim
+            ? '<span class="badge badge-success">Terkirim</span>'
+            : '<span class="badge badge-outline" style="cursor:pointer;" onclick="kirimEmailSingle(' + row.id + ')">Belum (Kirim)</span>';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="checkbox" class="kel-check" value="${row.id}"></td>
+            <td>${row.no || (i + 1)}</td>
+            <td>
+              <b style="color: #fff;">${row.nama}</b><br>
+              <code style="color: #38bdf8; font-size: 11px;">${row.idPendaftar}</code>
+            </td>
+            <td><span style="font-family: monospace;">${row.nomorUjian || '-'}</span></td>
+            <td><span class="badge badge-info">PIL ${row.pil}</span></td>
+            <td>${row.programStudi}</td>
+            <td>${row.seleksi}</td>
+            <td><b>${row.nilai}</b></td>
+            <td>${emailBadge}</td>
+            <td>${row.pjCadangan}</td>
+            <td>${setBadge}</td>
+            <td>${badgeStatus}</td>
+            <td>
+              <button class="btn btn-outline" style="padding: 4px 8px; font-size: 11px;" onclick="quickUbahKelulusan(${row.id}, '${row.nama}')">⚙️ Ubah</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function toggleSetCadangan(id, isSet) {
+      try {
+        await fetch('/api/admin/kelulusan/tetapkan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pendaftarId: id, statusKelulusan: 'CADANGAN', isCadanganDisetujui: isSet })
+        });
+        loadKelulusan();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function quickUbahKelulusan(id, nama) {
+      const status = prompt(`Ubah status kelulusan untuk ${nama}:\n(Ketik: LULUS, CADANGAN, TIDAK_LULUS, atau MENUNGGU)`);
+      if (!status) return;
+      try {
+        const res = await fetch('/api/admin/kelulusan/tetapkan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pendaftarId: id, statusKelulusan: status.toUpperCase() })
+        });
+        const json = await res.json();
+        alert(json.message);
+        loadKelulusan();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function kirimEmailSingle(id) {
+      try {
+        const res = await fetch('/api/admin/kelulusan/kirim-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pendaftarIds: [id] })
+        });
+        const json = await res.json();
+        alert(json.message);
+        loadKelulusan();
+      } catch (e) { alert(e.message); }
+    }
+
+    function toggleAllKelulusan(source) {
+      document.querySelectorAll('.kel-check').forEach(c => c.checked = source.checked);
+    }
+
+    // ==================== TAB 3: REFERENSI ====================
+    async function loadReferensi() {
+      try {
+        // Gelombang
+        const resG = await fetch('/api/admin/referensi/gelombang');
+        const jsonG = await resG.json();
+        const tbodyG = document.getElementById('gelombangTableBody');
+        tbodyG.innerHTML = '';
+        jsonG.data.forEach(g => {
+          tbodyG.innerHTML += `<tr><td><b>${g.kode}</b></td><td>${g.nama}</td></tr>`;
+        });
+
+        // Jalur
+        const resJ = await fetch('/api/admin/referensi/jalur-pendaftaran');
+        const jsonJ = await resJ.json();
+        const tbodyJ = document.getElementById('jalurTableBody');
+        tbodyJ.innerHTML = '';
+        jsonJ.data.forEach(j => {
+          tbodyJ.innerHTML += `<tr><td>${j.id}</td><td><b>${j.nama}</b></td><td>${j.deskripsi || '-'}</td></tr>`;
+        });
+
+        // Sistem
+        const resS = await fetch('/api/admin/referensi/sistem-kuliah');
+        const jsonS = await resS.json();
+        const tbodyS = document.getElementById('sistemTableBody');
+        tbodyS.innerHTML = '';
+        jsonS.data.forEach(s => {
+          tbodyS.innerHTML += `<tr><td>${s.id}</td><td><b>${s.nama}</b></td></tr>`;
+        });
+
+        // RPL Docs
+        const resR = await fetch('/api/admin/referensi/dokumen-rpl');
+        const jsonR = await resR.json();
+        const tbodyR = document.getElementById('rplDocTableBody');
+        tbodyR.innerHTML = '';
+        jsonR.data.forEach(r => {
+          tbodyR.innerHTML += `<tr><td><code>${r.kode}</code></td><td>${r.nama}</td><td>${r.wajib ? '<span class="badge badge-success">Wajib</span>' : '<span class="badge badge-outline">Opsional</span>'}</td></tr>`;
+        });
+      } catch (e) { console.error(e); }
+    }
+
+    // ==================== TAB 4: LAPORAN UKT ====================
+    async function loadLaporanUkt() {
+      const params = new URLSearchParams();
+      const p = document.getElementById('lapPeriode').value;
+      const j = document.getElementById('lapJalur').value;
+      const g = document.getElementById('lapGelombang').value;
+      const s = document.getElementById('lapSistem').value;
+      const pr = document.getElementById('lapProdi').value;
+      const k = document.getElementById('lapKelompok').value;
+
+      if (p) params.append('periodeId', p);
+      if (j) params.append('jalurId', j);
+      if (g) params.append('gelombangId', g);
+      if (s) params.append('sistemKuliahId', s);
+      if (pr) params.append('prodiDiterimaId', pr);
+      if (k) params.append('kelompokUkt', k);
+
+      try {
+        const res = await fetch(`/api/admin/laporan/ukt?${params.toString()}`);
+        const json = await res.json();
+        const report = json.data;
+
+        document.getElementById('lapTanggalCetak').textContent = report.tanggalCetak;
+        document.getElementById('lapTotalCount').textContent = report.totalPendaftar;
+
+        const tbody = document.getElementById('laporanTableBody');
+        tbody.innerHTML = '';
+
+        if (!report.data || report.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 24px;">Tidak ada data pendaftar pada filter ini.</td></tr>';
+          return;
+        }
+
+        report.data.forEach((r, idx) => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><b>${r.idPendaftar}</b></td>
+              <td>${r.nama}</td>
+              <td>${r.prodi}</td>
+              <td>${r.jalur}</td>
+              <td><span class="badge badge-info">${r.kelompokUkt}</span></td>
+              <td><b>Rp ${Number(r.nominalUkt).toLocaleString('id-ID')}</b></td>
+              <td>${r.statusDaftarUlang === 'Lunas / Terdaftar' ? '<span class="badge badge-success">Lunas</span>' : '<span class="badge badge-warning">Belum Bayar</span>'}</td>
+            </tr>
+          `;
+        });
+      } catch (e) { console.error(e); }
+    }
+
+    function toggleKop(show) {
+      document.getElementById('kopSuratElem').style.display = show ? 'flex' : 'none';
+    }
+
+    // ==================== TAB 5: LOGIN AS (SCREENSHOT 5) ====================
+    async function executeSearchLoginAs() {
+      const q = document.getElementById('loginAsSearchInput').value.trim();
+      const container = document.getElementById('loginAsResultContainer');
+      container.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">Mencari pendaftar...</div>';
+
+      try {
+        const res = await fetch(`/api/admin/pendaftar/login-as/search?q=${encodeURIComponent(q)}`);
+        const json = await res.json();
+
+        if (!json.data || json.data.length === 0) {
+          container.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">Pendaftar tidak ditemukan. Silakan masukkan Nama atau ID Pendaftar yang valid.</div>';
+          return;
+        }
+
+        const p = json.data[0];
+        container.innerHTML = `
+          <div class="login-as-card">
+            <div class="login-as-row">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Pas Foto" class="camaba-photo">
+              <div class="camaba-details">
+                <div class="detail-row">
+                  <span class="detail-label">ID Pendaftar</span>
+                  <span>:</span>
+                  <span class="detail-val-id">${p.idPendaftar}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Nama</span>
+                  <span>:</span>
+                  <span class="detail-val-name">${p.nama}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Prodi Pilihan</span>
+                  <span>:</span>
+                  <div class="prodi-list">
+                    <span>Pilihan 1 : ${p.prodiPilihan.pilihan1}</span>
+                    <span>Pilihan 2 : ${p.prodiPilihan.pilihan2}</span>
+                    <span>Pilihan 3 : ${p.prodiPilihan.pilihan3}</span>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Informasi</span>
+                  <span>:</span>
+                  <span style="color: #475569; font-weight: 500;">${p.informasi}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Login As (Screenshot 5) -->
+            <button class="btn-login-as" onclick="performLoginAs('${p.idPendaftar}')">
+              ✔ Login As
+            </button>
+          </div>
+        `;
+      } catch (e) {
+        container.innerHTML = `<div style="text-align: center; padding: 30px; color: #f87171;">Error: ${e.message}</div>`;
+      }
+    }
+
+    async function performLoginAs(idPendaftar) {
+      try {
+        const res = await fetch('/api/admin/pendaftar/login-as', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: idPendaftar })
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+
+        // Simpan token impersonasi ke localStorage untuk portal Camaba
+        localStorage.setItem('pmb_token', json.token);
+        localStorage.setItem('pmb_user', JSON.stringify(json.user));
+
+        alert(`✔ ${json.message}\n\nMembuka portal Camaba dalam mode Login As...`);
+        // Buka portal camaba
+        window.open('/camaba', '_blank');
+      } catch (e) {
+        alert('Gagal Login As: ' + e.message);
+      }
+    }
+
+    // Populate dropdowns on load
+    async function initDropdowns() {
+      try {
+        const [pRes, gRes, jRes, sRes, prRes] = await Promise.all([
+          fetch('/api/admin/referensi/periode'),
+          fetch('/api/admin/referensi/gelombang'),
+          fetch('/api/admin/referensi/jalur-pendaftaran'),
+          fetch('/api/admin/referensi/sistem-kuliah'),
+          fetch('/api/admin/referensi/program-studi')
+        ]);
+
+        const [pData, gData, jData, sData, prData] = await Promise.all([
+          pRes.json(), gRes.json(), jRes.json(), sRes.json(), prRes.json()
+        ]);
+
+        // Periode
+        const pSelects = [document.getElementById('kelPeriode'), document.getElementById('lapPeriode')];
+        pSelects.forEach(sel => {
+          sel.innerHTML = '<option value="">-- Semua Periode --</option>';
+          pData.data.forEach(p => sel.innerHTML += `<option value="${p.id}">${p.nama}</option>`);
+        });
+
+        // Gelombang
+        const gSelects = [document.getElementById('kelGelombang'), document.getElementById('lapGelombang')];
+        gSelects.forEach(sel => {
+          gData.data.forEach(g => sel.innerHTML += `<option value="${g.kode}">${g.nama}</option>`);
+        });
+
+        // Jalur
+        const jSelects = [document.getElementById('kelJalur'), document.getElementById('lapJalur')];
+        jSelects.forEach(sel => {
+          jData.data.forEach(j => sel.innerHTML += `<option value="${j.id}">${j.nama}</option>`);
+        });
+
+        // Sistem Kuliah
+        const sSelects = [document.getElementById('kelSistem'), document.getElementById('lapSistem')];
+        sSelects.forEach(sel => {
+          sData.data.forEach(s => sel.innerHTML += `<option value="${s.id}">${s.nama}</option>`);
+        });
+
+        // Prodi
+        const prSelects = [document.getElementById('kelProdi'), document.getElementById('lapProdi')];
+        prSelects.forEach(sel => {
+          prData.data.forEach(pr => sel.innerHTML += `<option value="${pr.id}">${pr.jenjang} - ${pr.namaProdi}</option>`);
+        });
+      } catch (e) { console.error(e); }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await initDropdowns();
+      await loadDashboardData();
+    });
+  </script>
+</body>
+</html>

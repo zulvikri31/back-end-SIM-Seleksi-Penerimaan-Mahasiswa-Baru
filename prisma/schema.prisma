@@ -6,88 +6,259 @@ datasource db {
   provider = "postgresql"
 }
 
-// --- 1. ENUM ROLE ---
 enum Role {
   ADMIN
   CAMABA
 }
 
-// --- 2. TABEL USER (AKUN LOGIN) ---
 model User {
   id        Int        @id @default(autoincrement())
   nama      String
   email     String     @unique
   password  String
   role      Role       @default(CAMABA)
-  isActive  Boolean    @default(false) // Untuk Kartu Biru: Akun Aktif / Belum Aktif
+  isActive  Boolean    @default(false)
   createdAt DateTime   @default(now())
 
-  // Relasi One-to-One ke Pendaftar
   pendaftar Pendaftar?
 }
 
-// --- 3. TABEL MASTER / REFERENSI (FILTER DROPDOWN DASHBOARD) ---
 model Periode {
-  id        Int         @id @default(autoincrement())
-  nama      String      // Contoh: "2027 Genap"
-  isActive  Boolean     @default(true)
-  
-  // Relasi One-to-Many: 1 Periode punya BANYAK Pendaftar
-  pendaftar Pendaftar[]
+  id             Int              @id @default(autoincrement())
+  kode           String           @unique // Contoh: "20262", "20272" (Untuk grafik Funnel)
+  nama           String           // Contoh: "2027 Genap"
+  isActive       Boolean          @default(true)
+  pembukaanJalur PembukaanJalur[]
+  pendaftar      Pendaftar[]
 }
 
 model Gelombang {
-  id        Int         @id @default(autoincrement())
-  nama      String      // Contoh: "Gelombang 1"
-  pendaftar Pendaftar[]
+  id             Int              @id @default(autoincrement())
+  nama           String
+  pembukaanJalur PembukaanJalur[]
+  pendaftar      Pendaftar[]
 }
 
 model JalurPendaftaran {
-  id        Int         @id @default(autoincrement())
-  nama      String      // Contoh: "Reguler", "RPL"
-  pendaftar Pendaftar[]
+  id             Int              @id @default(autoincrement())
+  nama           String
+  deskripsi      String?
+  pembukaanJalur PembukaanJalur[]
+  pendaftar      Pendaftar[]
 }
 
 model SistemKuliah {
-  id        Int         @id @default(autoincrement())
-  nama      String      // Contoh: "Reguler Pagi", "Karyawan"
-  pendaftar Pendaftar[]
+  id             Int              @id @default(autoincrement())
+  nama           String
+  pembukaanJalur PembukaanJalur[]
+  pendaftar      Pendaftar[]
 }
 
 model ProgramStudi {
-  id        Int         @id @default(autoincrement())
-  namaProdi String      // Contoh: "Teknik Informatika"
-  jenjang   String      // Contoh: "S1", "S2"
-  pendaftar Pendaftar[]
+  id                 Int              @id @default(autoincrement())
+  namaProdi          String
+  jenjang            String
+  akreditasi         String?
+  biayaKuliah        Int              @default(0)
+  fakultas           String?          // e.g. "Fakultas Keguruan dan Ilmu Pendidikan", "Fakultas Hukum", "Fakultas Ekonomi dan Bisnis"
+  pembukaanJalur     PembukaanJalur[]
+  pendaftar          Pendaftar[]      @relation("ProdiPilihan1")
+  pendaftarPilihan2  Pendaftar[]      @relation("ProdiPilihan2")
+  pendaftarPilihan3  Pendaftar[]      @relation("ProdiPilihan3")
+  pendaftarDiterima  Pendaftar[]      @relation("ProdiDiterima")
+  mataKuliahRpl      MataKuliahRpl[]
 }
 
-// --- 4. TABEL TRANSAKSI UTAMA (PENDAFTAR) ---
-model Pendaftar {
-  id                 Int              @id @default(autoincrement())
-  
-  // Foreign Key One-to-One ke User (Pakai @unique)
-  userId             Int              @unique
-  user               User             @relation(fields: [userId], references: [id])
+model InformasiBrosur {
+  id        Int      @id @default(autoincrement())
+  judul     String
+  kategori  String
+  deskripsi String?
+  fileUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
 
-  // Foreign Key One-to-Many ke Tabel Master (Tanpa @unique)
+model PembukaanJalur {
+  id                 Int              @id @default(autoincrement())
   periodeId          Int
   periode            Periode          @relation(fields: [periodeId], references: [id])
-  
   gelombangId        Int
   gelombang          Gelombang        @relation(fields: [gelombangId], references: [id])
-  
   jalurPendaftaranId Int
   jalurPendaftaran   JalurPendaftaran @relation(fields: [jalurPendaftaranId], references: [id])
-  
   sistemKuliahId     Int
   sistemKuliah       SistemKuliah     @relation(fields: [sistemKuliahId], references: [id])
-  
   programStudiId     Int
   programStudi       ProgramStudi     @relation(fields: [programStudiId], references: [id])
 
-  // Status untuk Kartu Hijau, Oranye, dan Merah di Dashboard Admin
-  isFinalisasi       Boolean          @default(false)
-  isDiterima         Boolean          @default(false)
-  isDaftarUlang      Boolean          @default(false)
-  createdAt          DateTime         @default(now())
+  biayaPendaftaran   Int              @default(0)
+  kuota              Int              @default(50)
+  tanggalBuka        DateTime?
+  tanggalTutup       DateTime?
+  isBuka             Boolean          @default(true)
+}
+
+model Pendaftar {
+  id                 Int              @id @default(autoincrement())
+  noPendaftaran      String?          @unique
+  nomorUjian         String?          // Untuk Seleksi & Kelulusan (Screenshot 1)
+  nim                String?          @unique // Untuk tahap ke-8 Funnel: "Generate NIM"
+  userId             Int              @unique
+  user               User             @relation(fields: [userId], references: [id])
+
+  periodeId          Int
+  periode            Periode          @relation(fields: [periodeId], references: [id])
+  gelombangId        Int
+  gelombang          Gelombang        @relation(fields: [gelombangId], references: [id])
+  jalurPendaftaranId Int
+  jalurPendaftaran   JalurPendaftaran @relation(fields: [jalurPendaftaranId], references: [id])
+  sistemKuliahId     Int
+  sistemKuliah       SistemKuliah     @relation(fields: [sistemKuliahId], references: [id])
+
+  // Pilihan Program Studi 1 (Utama), 2, 3 (Screenshot 1 & 5)
+  programStudiId     Int
+  programStudi       ProgramStudi     @relation("ProdiPilihan1", fields: [programStudiId], references: [id])
+  pilihanProdi2Id    Int?
+  pilihanProdi2      ProgramStudi?    @relation("ProdiPilihan2", fields: [pilihanProdi2Id], references: [id])
+  pilihanProdi3Id    Int?
+  pilihanProdi3      ProgramStudi?    @relation("ProdiPilihan3", fields: [pilihanProdi3Id], references: [id])
+  
+  // Prodi yang Dinyatakan Lolos/Diterima
+  prodiDiterimaId    Int?
+  prodiDiterima      ProgramStudi?    @relation("ProdiDiterima", fields: [prodiDiterimaId], references: [id])
+
+  // Status Badge Spesifik Admin (Screenshot 1 & Kelulusan)
+  statusPendaftar    String           @default("BELUM_FINALISASI") // BELUM_FINALISASI, SUDAH_FINALISASI, LULUS, DAFTAR_ULANG
+  statusKelulusan    String           @default("MENUNGGU")         // MENUNGGU, LULUS, TIDAK_LULUS, CADANGAN
+  isCadanganDisetujui Boolean         @default(false)              // SET (Cadangan Disetujui)
+  emailKelulusanTerkirim Boolean      @default(false)
+  isNimBatal         Boolean          @default(false)
+  tanggalGenerateNim DateTime?
+
+  // UKT (Uang Kuliah Tunggal) & KIP (Screenshot 4)
+  kelompokUkt        String?          // e.g. "UKT 1", "UKT 2", "UKT 3"
+  nominalUkt         Int?             @default(0)
+  isKip              Boolean          @default(false)
+
+  // One Day Service / ODS (Screenshot 2)
+  statusOds          String           @default("PEMINAT")          // PEMINAT, PENDAFTAR, PESERTA_SELEKSI, DAFTAR_ULANG
+  isOdsDihubungi     Boolean          @default(false)              // false: Belum Dihubungi, true: Sudah Dihubungi
+  catatanOds         String?
+
+  // Data Biodata, Wilayah, Pendidikan, & Sumber Trafik (Untuk Pie Chart & Tab Bawah)
+  nik                String?
+  jenisKelamin       String?          // Untuk grafik "Jenis Kelamin" (Laki-laki / Perempuan)
+  tempatLahir        String?
+  tanggalLahir       DateTime?
+  noHp               String?
+  alamat             String?
+  provinsi           String?
+  kabupatenKota      String?
+  asalSekolah        String?
+  jenisPendidikan    String?          // Untuk grafik "Jenis Pendidikan" (SMA / SMK / MA)
+  jurusanPendidikan  String?          // Untuk grafik "Jurusan Pendidikan" (IPA / IPS / Kejuruan)
+  tahunLulus         Int?             // Untuk grafik "Tahun Lulus" (2026, dst.)
+  sumberTrafik       String?          // Untuk grafik "Sumber Trafik Pendaftar"
+
+  // Field Biodata Detail (Sesuai Form Profil Camaba UIKA)
+  beratBadan         Int?             // Contoh: 43
+  tinggiBadan        Int?             // Contoh: 150
+  suku               String?          // Contoh: "Sunda"
+  agama              String?          // Contoh: "Islam"
+  kebutuhanKhusus    String?          // Contoh: "Tidak"
+
+  // Tahapan Funnel Penerimaan Mahasiswa Baru & Kartu Statistik
+  isBiodataLengkap   Boolean          @default(false) // Tahap Funnel: "Mengisi Biodata"
+  isFinalisasi       Boolean          @default(false) // Tahap Funnel: "Finalisasi Data"
+  isIkutSeleksi      Boolean          @default(false) // Tahap Funnel: "Mengikuti Seleksi"
+  isDiterima         Boolean          @default(false) // Tahap Funnel: "Lulus"
+  isDaftarUlang      Boolean          @default(false) // Tahap Funnel: "Daftar Ulang"
+
+  // Timestamp untuk Grafik Frekuensi Bulanan/Tanggal
+  createdAt          DateTime         @default(now()) // Tanggal "Daftar"
+  tanggalFinalisasi  DateTime?
+  tanggalLulus       DateTime?
+  tanggalDaftarUlang DateTime?
+
+  orangTua           OrangTua?
+  berkas             BerkasPendaftar[]
+  nilaiSeleksi       NilaiSeleksi[]
+  rekamMedis         RekamMedis?
+}
+
+model RekamMedis {
+  id                    Int       @id @default(autoincrement())
+  pendaftarId           Int       @unique
+  pendaftar             Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
+
+  golonganDarah         String?   // A, B, AB, O
+  rhesus                String?   // Positif (+), Negatif (-)
+  tinggiBadan           Int?      // cm
+  beratBadan            Int?      // kg
+  riwayatPenyakit       String?   // Asma, Jantung, Hipertensi, Paru-paru, dll
+  riwayatAlergi         String?   // Alergi obat, makanan, debu, dll
+  statusButaWarna       String?   @default("TIDAK") // TIDAK, PARSIAL, TOTAL
+  isBerkacamata         Boolean?  @default(false)
+  isMerokok             Boolean?  @default(false)
+  riwayatOperasi        String?   // Operasi yang pernah dijalani
+  riwayatRawatInap      String?   // Riwayat opname/rawat inap
+  kebutuhanKhusus       String?   // Disabilitas fisik, sensorik, dll
+  
+  // Kontak Darurat Medis
+  kontakDaruratNama     String?   // Nama pihak yang dapat dihubungi saat darurat
+  kontakDaruratHubungan String?   // Hubungan (Orang Tua / Wali / Saudara)
+  kontakDaruratNoHp     String?   // Nomor telepon darurat
+
+  // Lampiran Surat Keterangan Medis
+  fileSuratKesehatan    String?   // URL Surat Sehat Dokter
+  fileBebasNarkoba      String?   // URL Surat Bebas Narkoba
+  catatanKesehatan      String?   // Catatan medis tambahan
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model OrangTua {
+  id              Int       @id @default(autoincrement())
+  pendaftarId     Int       @unique
+  pendaftar       Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
+  namaAyah        String?
+  pekerjaanAyah   String?
+  namaIbu         String?
+  pekerjaanIbu    String?
+  penghasilanOrtu String?
+  noHpOrtu        String?
+}
+
+model BerkasPendaftar {
+  id               Int       @id @default(autoincrement())
+  pendaftarId      Int
+  pendaftar        Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
+  jenisBerkas      String
+  fileUrl          String
+  statusVerifikasi String    @default("MENUNGGU")
+}
+
+model NilaiSeleksi {
+  id          Int       @id @default(autoincrement())
+  pendaftarId Int
+  pendaftar   Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
+  jenisTes    String
+  nilai       Float     @default(0)
+  lulusTes    Boolean   @default(false)
+  catatan     String?
+}
+
+model MataKuliahRpl {
+  id             Int          @id @default(autoincrement())
+  programStudiId Int
+  programStudi   ProgramStudi @relation(fields: [programStudiId], references: [id])
+  tahunKurikulum String       @default("2026")
+  kodeMK         String
+  namaMK         String
+  sksWajib       Int          @default(0)
+  sksPilihan     Int          @default(0)
+  sksTotal       Int          @default(0)
+  statusCpmk     String       @default("Belum Terisi") // "Belum Terisi" / "Sudah Terisi"
 }

@@ -1,0 +1,730 @@
+{
+  "info": {
+    "_postman_id": "uika-spmb-api-collection-2026",
+    "name": "SIM SPMB UIKA Bogor - API Collection",
+    "description": "Koleksi Endpoint API Lengkap Backend SIM Seleksi Penerimaan Mahasiswa Baru (SPMB) Universitas Ibn Khaldun Bogor.\nMendukung seluruh modul Camaba, Admin Dashboard, Pendaftar, One Day Service (ODS), Kelulusan, Referensi, Laporan UKT, dan Fitur Login As.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "camaba_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Autentikasi (Auth)",
+      "item": [
+        {
+          "name": "Login Admin SPMB (Auto-Save Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('admin_token', jsonData.data.token);",
+                  "    console.log('✔ Token Admin berhasil disimpan ke variabel: ' + jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@uika-bogor.ac.id\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login sebagai Admin SPMB. Skrip pengujian otomatis menyimpan token ke variabel {{admin_token}}."
+          }
+        },
+        {
+          "name": "Login Camaba via ID Pendaftar + PIN (Auto-Save Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('camaba_token', jsonData.data.token);",
+                  "    console.log('✔ Token Camaba berhasil disimpan ke variabel: ' + jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"4102541051\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login pendaftar menggunakan ID Pendaftar (contoh akun Rosiana: 4102541051) dan PIN/Password: 123456."
+          }
+        },
+        {
+          "name": "Login Camaba via Email + Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"rosiana@gmail.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Registrasi Akun Camaba Baru",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Calon Mahasiswa Baru 2026\",\n  \"email\": \"camaba.baru.2026@gmail.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Profil Saya (/api/auth/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Portal Camaba (Calon Mahasiswa)",
+      "item": [
+        {
+          "name": "Katalog Jenjang Pendidikan",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/camaba/jenjang", "host": ["{{base_url}}"], "path": ["api", "camaba", "jenjang"] }
+          }
+        },
+        {
+          "name": "Katalog Program Studi (Bisa Filter Jenjang/Search)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/camaba/program-studi?jenjang=S1&search=Informatika",
+              "host": ["{{base_url}}"],
+              "path": ["api", "camaba", "program-studi"],
+              "query": [
+                { "key": "jenjang", "value": "S1" },
+                { "key": "search", "value": "Informatika" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Jalur Pendaftaran Aktif",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/camaba/jalur-pendaftaran", "host": ["{{base_url}}"], "path": ["api", "camaba", "jalur-pendaftaran"] }
+          }
+        },
+        {
+          "name": "Brosur & Rincian Biaya",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/camaba/brosur", "host": ["{{base_url}}"], "path": ["api", "camaba", "brosur"] }
+          }
+        },
+        {
+          "name": "Status Pendaftaran & Biodata Camaba (Wajib Login)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{camaba_token}}" }],
+            "url": { "raw": "{{base_url}}/api/camaba/status", "host": ["{{base_url}}"], "path": ["api", "camaba", "status"] }
+          }
+        },
+        {
+          "name": "Update Biodata, Pilihan 2 & 3, Serta Data Orang Tua",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{camaba_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"3271012345678901\",\n  \"tempatLahir\": \"Bogor\",\n  \"tanggalLahir\": \"2006-08-17\",\n  \"jenisKelamin\": \"Perempuan\",\n  \"noHp\": \"081299887766\",\n  \"alamat\": \"Jl. KH Sholeh Iskandar No. 15, Kedung Badak\",\n  \"provinsi\": \"Jawa Barat\",\n  \"kabupatenKota\": \"Kota Bogor\",\n  \"asalSekolah\": \"SMKN 1 Kota Bogor\",\n  \"jurusanPendidikan\": \"Rekayasa Perangkat Lunak\",\n  \"tahunLulus\": 2025,\n  \"agama\": \"Islam\",\n  \"pilihanProdi2Id\": 3,\n  \"pilihanProdi3Id\": 20,\n  \"namaAyah\": \"Budi Santoso\",\n  \"pekerjaanAyah\": \"Wiraswasta\",\n  \"namaIbu\": \"Siti Aminah\",\n  \"pekerjaanIbu\": \"Ibu Rumah Tangga\",\n  \"penghasilanOrtu\": \"Rp 3.000.000 - Rp 5.000.000\",\n  \"noHpOrtu\": \"081233445566\",\n  \"isFinalisasi\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/camaba/biodata", "host": ["{{base_url}}"], "path": ["api", "camaba", "biodata"] }
+          }
+        },
+        {
+          "name": "Ambil Data Rekam Medis Camaba (Wajib Login)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{camaba_token}}" }],
+            "url": { "raw": "{{base_url}}/api/camaba/rekam-medis", "host": ["{{base_url}}"], "path": ["api", "camaba", "rekam-medis"] }
+          }
+        },
+        {
+          "name": "Simpan / Update Rekam Medis Camaba",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{camaba_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"golonganDarah\": \"O\",\n  \"rhesus\": \"+\",\n  \"tinggiBadan\": 172,\n  \"beratBadan\": 65,\n  \"riwayatPenyakit\": \"Tidak ada penyakit kronis\",\n  \"riwayatAlergi\": \"Alergi dingin/seafood\",\n  \"statusButaWarna\": \"TIDAK\",\n  \"isBerkacamata\": true,\n  \"isMerokok\": false,\n  \"riwayatOperasi\": \"-\",\n  \"riwayatRawatInap\": \"-\",\n  \"kebutuhanKhusus\": \"-\",\n  \"kontakDaruratNama\": \"H. Ahmad Dahlan\",\n  \"kontakDaruratHubungan\": \"Orang Tua\",\n  \"kontakDaruratNoHp\": \"081299881122\",\n  \"fileSuratKesehatan\": \"https://example.com/surat-sehat.pdf\",\n  \"fileBebasNarkoba\": \"https://example.com/bebas-narkoba.pdf\",\n  \"catatanKesehatan\": \"Kondisi fisik prima untuk kuliah\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/camaba/rekam-medis", "host": ["{{base_url}}"], "path": ["api", "camaba", "rekam-medis"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Admin - Dashboard & Analytics",
+      "item": [
+        {
+          "name": "Get Seluruh Data Grafik & Funnel 8 Tahap (/charts)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/dashboard/charts", "host": ["{{base_url}}"], "path": ["api", "admin", "dashboard", "charts"] },
+            "description": "Mengembalikan data lengkap: Funnel 8 Tahap Konversi, Frekuensi Bulanan, Pie Chart Sumber Trafik, Demografi Gender, Tahun Lulus, dll."
+          }
+        },
+        {
+          "name": "Get Ringkasan 8 Angka KPI (/summary)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/dashboard/summary", "host": ["{{base_url}}"], "path": ["api", "admin", "dashboard", "summary"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Admin - Pendaftar & Login As",
+      "item": [
+        {
+          "name": "1. Get Seluruh Opsi Dropdown Filter (Bebas Dummy!)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/pendaftar/dropdown-options", "host": ["{{base_url}}"], "path": ["api", "admin", "pendaftar", "dropdown-options"] },
+            "description": "Mengembalikan opsi resmi dari database untuk: Periode, Gelombang, Jalur, Sistem Kuliah, Prodi, Status Pendaftar, Pilihan 1-3, dan Kategori Search."
+          }
+        },
+        {
+          "name": "2. Get List Pendaftar (8 Filter & Search)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/admin/pendaftar?page=1&limit=10&search=Rosiana&searchBy=nama_kode",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "pendaftar"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "search", "value": "Rosiana" },
+                { "key": "searchBy", "value": "nama_kode" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Get Detail 1 Pendaftar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/pendaftar/51", "host": ["{{base_url}}"], "path": ["api", "admin", "pendaftar", "51"] }
+          }
+        },
+        {
+          "name": "4. Search Pendaftar untuk 'Login As' (Screenshot 5)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/admin/pendaftar/login-as/search?q=Rosiana",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "pendaftar", "login-as", "search"],
+              "query": [{ "key": "q", "value": "Rosiana" }]
+            }
+          }
+        },
+        {
+          "name": "5. Eksekusi 'Login As' Camaba (Impersonate Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.token) {",
+                  "    pm.collectionVariables.set('camaba_token', jsonData.token);",
+                  "    console.log('✔ Token Impersonasi Camaba berhasil disimpan!');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"4102541051\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/pendaftar/login-as", "host": ["{{base_url}}"], "path": ["api", "admin", "pendaftar", "login-as"] },
+            "description": "Admin login langsung ke akun Camaba (ID: 4102541051) tanpa password. Token otomatis tersimpan."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Admin - Kelulusan (Screenshot 1)",
+      "item": [
+        {
+          "name": "1. Rekomendasi Prodi (Tabel Kelulusan Screenshot 1)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/admin/kelulusan/rekomendasi-prodi?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "kelulusan", "rekomendasi-prodi"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Tetapkan Kelulusan & SET Cadangan Disetujui",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 52,\n  \"statusKelulusan\": \"CADANGAN\",\n  \"isCadanganDisetujui\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/tetapkan", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "tetapkan"] }
+          }
+        },
+        {
+          "name": "3. Kirim Email Pengumuman Kelulusan",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarIds\": [51, 53]\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/kirim-email", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "kirim-email"] }
+          }
+        },
+        {
+          "name": "4. List Registrasi Ulang Mahasiswa Lulus",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/registrasi-ulang", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "registrasi-ulang"] }
+          }
+        },
+        {
+          "name": "5. Update Status Registrasi Ulang (Sudah Daftar Ulang)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 52,\n  \"isDaftarUlang\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/registrasi-ulang/update", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "registrasi-ulang", "update"] }
+          }
+        },
+        {
+          "name": "6. Generate NIM Mahasiswa",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 53,\n  \"customNim\": \"2611020088\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/generate-nim", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "generate-nim"] }
+          }
+        },
+        {
+          "name": "7. Batalkan NIM",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 53,\n  \"alasan\": \"Calon mahasiswa mengundurkan diri pindah PTN.\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/kelulusan/batalkan-nim", "host": ["{{base_url}}"], "path": ["api", "admin", "kelulusan", "batalkan-nim"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin - One Day Service (ODS)",
+      "item": [
+        {
+          "name": "1. Antrean Pendaftar ODS (Filter Status & Dihubungi)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/admin/ods?statusOds=all&isOdsDihubungi=false&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "ods"],
+              "query": [
+                { "key": "statusOds", "value": "all" },
+                { "key": "isOdsDihubungi", "value": "false" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Catat Follow-up / Telepon Pendaftar ODS",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 51,\n  \"catatan\": \"Sudah dihubungi via WA. Calon mahasiswa bersedia ikut tes CBT sore ini jam 14.00.\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/ods/hubungi", "host": ["{{base_url}}"], "path": ["api", "admin", "ods", "hubungi"] }
+          }
+        },
+        {
+          "name": "3. Update Status Tahapan ODS",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 51,\n  \"statusOds\": \"PESERTA_SELEKSI\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/ods/update-status", "host": ["{{base_url}}"], "path": ["api", "admin", "ods", "update-status"] }
+          }
+        },
+        {
+          "name": "4. Ringkasan Statistik ODS Hari Ini",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/ods/stats", "host": ["{{base_url}}"], "path": ["api", "admin", "ods", "stats"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Admin - Referensi (Screenshot 2 & 3)",
+      "item": [
+        {
+          "name": "Master Gelombang (1-3, KIP A, B, C)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/gelombang", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "gelombang"] }
+          }
+        },
+        {
+          "name": "Master Jalur Pendaftaran (SBMPTN, KIP, Mandiri, RPL)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/jalur-pendaftaran", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "jalur-pendaftaran"] }
+          }
+        },
+        {
+          "name": "Master Sistem Kuliah",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/sistem-kuliah", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "sistem-kuliah"] }
+          }
+        },
+        {
+          "name": "Master Program Studi & Jenjang",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/program-studi", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "program-studi"] }
+          }
+        },
+        {
+          "name": "Master Jenis Dokumen RPL",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/dokumen-rpl", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "dokumen-rpl"] }
+          }
+        },
+        {
+          "name": "Master Wilayah (Provinsi & Kabupaten/Kota)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/referensi/wilayah", "host": ["{{base_url}}"], "path": ["api", "admin", "referensi", "wilayah"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Admin - Laporan (Screenshot 4)",
+      "item": [
+        {
+          "name": "Laporan Penetapan UKT (dengan KOP UIKA & Summary)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/admin/laporan/ukt?kelompokUkt=all&gunakanKop=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "laporan", "ukt"],
+              "query": [
+                { "key": "kelompokUkt", "value": "all" },
+                { "key": "gunakanKop", "value": "true" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Laporan Biodata Pendaftar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/laporan/biodata", "host": ["{{base_url}}"], "path": ["api", "admin", "laporan", "biodata"] }
+          }
+        },
+        {
+          "name": "Laporan Rekapitulasi per Program Studi",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/laporan/rekapitulasi", "host": ["{{base_url}}"], "path": ["api", "admin", "laporan", "rekapitulasi"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Admin - Pengaturan (Screenshot 1 Pengaturan)",
+      "item": [
+        {
+          "name": "1. Periode Pendaftaran (Jalur Dibuka, Biaya, Status, Kuota)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/pengaturan/periode-pendaftaran?page=1&limit=10", "host": ["{{base_url}}"], "path": ["api", "admin", "pengaturan", "periode-pendaftaran"] }
+          }
+        },
+        {
+          "name": "2. Tambah / Buka Jalur Pendaftaran Baru",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"periodeId\": 4,\n  \"gelombangId\": 1,\n  \"jalurPendaftaranId\": 7,\n  \"sistemKuliahId\": 3,\n  \"programStudiId\": 21,\n  \"biayaPendaftaran\": 350000,\n  \"kuota\": 50,\n  \"isBuka\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/pengaturan/periode-pendaftaran", "host": ["{{base_url}}"], "path": ["api", "admin", "pengaturan", "periode-pendaftaran"] }
+          }
+        },
+        {
+          "name": "3. Toggle Status Buka / Tutup Jalur",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isBuka\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/pengaturan/periode-pendaftaran/1/toggle", "host": ["{{base_url}}"], "path": ["api", "admin", "pengaturan", "periode-pendaftaran", "1", "toggle"] }
+          }
+        },
+        {
+          "name": "4. Pengaturan UKT (Uang Kuliah Tunggal)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/pengaturan/ukt", "host": ["{{base_url}}"], "path": ["api", "admin", "pengaturan", "ukt"] }
+          }
+        },
+        {
+          "name": "5. Pengaturan Umum PMB",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/pengaturan/umum", "host": ["{{base_url}}"], "path": ["api", "admin", "pengaturan", "umum"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Admin - Seleksi (Screenshot 2 Seleksi)",
+      "item": [
+        {
+          "name": "1. Syarat Seleksi (Verifikasi Berkas Calon Mahasiswa)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/syarat-seleksi?page=1&limit=10", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "syarat-seleksi"] }
+          }
+        },
+        {
+          "name": "2. Verifikasi Dokumen Syarat (VALID / DITOLAK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"berkasId\": 7,\n  \"statusVerifikasi\": \"VALID\",\n  \"catatan\": \"Ijazah asli telah diverifikasi oleh tim admisi.\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/verifikasi-berkas", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "verifikasi-berkas"] }
+          }
+        },
+        {
+          "name": "3. Input Nilai Seleksi",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarId\": 51,\n  \"jenisTes\": \"Tes Potensi Akademik (CBT)\",\n  \"nilai\": 88.5,\n  \"lulusTes\": true,\n  \"catatan\": \"Nilai di atas passing grade 75\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/input-nilai", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "input-nilai"] }
+          }
+        },
+        {
+          "name": "4. Generate Nilai Seleksi Otomatis ([✔ Generate Nilai])",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarIds\": [51, 52, 53]\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/generate-nilai", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "generate-nilai"] }
+          }
+        },
+        {
+          "name": "5. Batal Nilai Seleksi ([✖ Batal Nilai])",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftarIds\": [51, 52]\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/batal-nilai", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "batal-nilai"] }
+          }
+        },
+        {
+          "name": "6. Peserta KIP Kuliah",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/seleksi/kip-kuliah", "host": ["{{base_url}}"], "path": ["api", "admin", "seleksi", "kip-kuliah"] }
+          }
+        }
+      ]
+    }
+  ]
+}

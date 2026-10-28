@@ -5,7 +5,7 @@ const port = 3000;
 // Middleware agar Express bisa membaca request body berupa JSON
 app.use(express.json());
 
-// Endpoint utama untuk mengecek status server
+// Endpoint utama untuk mengecek status server  
 app.get('/', (req, res) => {
     res.json({
         app: "API SIM PMB Universitas Ibn Khaldun Bogor",
