@@ -8,10 +8,42 @@ export class AdminOdsController {
    */
   async getList(req: Request, res: Response): Promise<void> {
     try {
-      const { periodeId, statusOds, isOdsDihubungi, search, page, limit } = req.query;
+      const {
+        periodeId,
+        periodeIds,
+        programStudiId,
+        programStudiIds,
+        unitIds,
+        prodiIds,
+        jalurPendaftaranId,
+        jalurPendaftaranIds,
+        jalurIds,
+        statusOds,
+        isOdsDihubungi,
+        search,
+        page,
+        limit,
+      } = req.query;
+
+      const parseNumList = (val: any): number[] => {
+        if (!val) return [];
+        if (Array.isArray(val)) return val.map((v) => Number(v)).filter((n) => !isNaN(n) && n > 0);
+        if (typeof val === 'string') return val.split(',').map((s) => Number(s.trim())).filter((n) => !isNaN(n) && n > 0);
+        if (typeof val === 'number' && val > 0) return [val];
+        return [];
+      };
+
+      const prodiList = parseNumList(programStudiIds || unitIds || prodiIds);
+      const jalurList = parseNumList(jalurPendaftaranIds || jalurIds);
+      const periodeList = parseNumList(periodeIds);
 
       const result = await adminOdsService.getOdsList({
         periodeId: periodeId ? Number(periodeId) : undefined,
+        periodeIds: periodeList.length > 0 ? periodeList : undefined,
+        programStudiId: programStudiId ? Number(programStudiId) : undefined,
+        programStudiIds: prodiList.length > 0 ? prodiList : undefined,
+        jalurPendaftaranId: jalurPendaftaranId ? Number(jalurPendaftaranId) : undefined,
+        jalurPendaftaranIds: jalurList.length > 0 ? jalurList : undefined,
         statusOds: statusOds ? String(statusOds) : undefined,
         isOdsDihubungi: isOdsDihubungi !== undefined ? isOdsDihubungi === 'true' : undefined,
         search: search ? String(search) : undefined,

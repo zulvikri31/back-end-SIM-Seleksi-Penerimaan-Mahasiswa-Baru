@@ -98,6 +98,104 @@ export class AdminPengaturanController {
       res.status(500).json({ success: false, message: error.message });
     }
   }
+
+  /**
+   * GET /api/admin/pengaturan/informasi
+   * Menampilkan daftar informasi / pengumuman untuk portal Camaba
+   */
+  async getInformasiList(req: Request, res: Response): Promise<void> {
+    try {
+      const { search, kategori, status, page, limit } = req.query;
+      const result = await adminPengaturanService.getInformasiList({
+        search: search ? String(search) : undefined,
+        kategori: kategori ? String(kategori) : undefined,
+        status: status ? String(status) : undefined,
+        page: page ? Number(page) : 1,
+        limit: limit ? Number(limit) : 10,
+      });
+
+      res.json({
+        success: true,
+        message: 'Daftar informasi portal Camaba berhasil diambil.',
+        ...result,
+      });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * GET /api/admin/pengaturan/informasi/:id
+   */
+  async getInformasiDetail(req: Request, res: Response): Promise<void> {
+    try {
+      const id = Number(req.params.id);
+      const data = await adminPengaturanService.getInformasiDetail(id);
+      res.json({
+        success: true,
+        message: `Detail informasi ID ${id} berhasil diambil.`,
+        data,
+      });
+    } catch (error: any) {
+      res.status(404).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * POST /api/admin/pengaturan/informasi
+   * Tambah informasi / pengumuman baru untuk portal Camaba
+   */
+  async createInformasi(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await adminPengaturanService.createInformasi(req.body);
+      res.status(201).json(result);
+    } catch (error: any) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * PUT /api/admin/pengaturan/informasi/:id
+   * Update informasi / pengumuman
+   */
+  async updateInformasi(req: Request, res: Response): Promise<void> {
+    try {
+      const id = Number(req.params.id);
+      const result = await adminPengaturanService.updateInformasi(id, req.body);
+      res.json(result);
+    } catch (error: any) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * PATCH /api/admin/pengaturan/informasi/:id/toggle
+   * Toggle status tayang informasi
+   */
+  async toggleInformasiStatus(req: Request, res: Response): Promise<void> {
+    try {
+      const id = Number(req.params.id);
+      const { isActive } = req.body;
+      const result = await adminPengaturanService.toggleInformasiStatus(id, isActive !== undefined ? Boolean(isActive) : undefined);
+      res.json(result);
+    } catch (error: any) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * DELETE /api/admin/pengaturan/informasi/:id
+   * Hapus informasi dari portal Camaba
+   */
+  async deleteInformasi(req: Request, res: Response): Promise<void> {
+    try {
+      const id = Number(req.params.id);
+      const result = await adminPengaturanService.deleteInformasi(id);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
 }
 
 export const adminPengaturanController = new AdminPengaturanController();

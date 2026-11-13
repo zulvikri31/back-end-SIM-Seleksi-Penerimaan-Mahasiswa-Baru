@@ -1,19 +1,11 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+/**
+ * File utama server SPMB UIKA Bogor
+ * Seluruh kode aplikasi telah dimigrasikan ke TypeScript di folder `src/`.
+ * Gunakan perintah:
+ *   - `npm run dev`  : Menjalankan server dalam mode development (live watch)
+ *   - `npm run start`: Menjalankan server dalam mode production
+ *   - `npm run build`: Kompilasi TypeScript ke folder dist/
+ */
 
-// Middleware agar Express bisa membaca request body berupa JSON
-app.use(express.json());
-
-// Endpoint utama untuk mengecek status server  
-app.get('/', (req, res) => {
-    res.json({
-        app: "API SIM PMB Universitas Ibn Khaldun Bogor",
-        status: "Aktif",
-        message: "Server backend berhasil berjalan!"
-    });
-});
-
-app.listen(port, () => {
-    console.log(`[SERVER] API berjalan di http://localhost:${port}`);
-});
+require('tsx/cjs');
+require('./src/server.ts');

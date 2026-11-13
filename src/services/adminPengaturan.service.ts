@@ -182,6 +182,205 @@ export class AdminPengaturanService {
       isUjianCbtOnline: true,
     };
   }
+
+  /**
+   * 4. Pengaturan Informasi & Berita Portal Camaba (Screenshot 3 Informasi)
+   * Mengambil daftar seluruh informasi/pengumuman untuk dikelola Admin
+   */
+  async getInformasiList(filter: {
+    search?: string;
+    kategori?: string;
+    status?: string; // 'all', 'AKTIF', 'NONAKTIF'
+    page?: number;
+    limit?: number;
+  }) {
+    const page = Math.max(1, Number(filter.page) || 1);
+    const limit = Math.max(1, Math.min(100, Number(filter.limit) || 10));
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (filter.status === 'AKTIF') where.isActive = true;
+    if (filter.status === 'NONAKTIF') where.isActive = false;
+
+    if (filter.kategori && filter.kategori !== 'all') {
+      where.kategori = { contains: filter.kategori, mode: 'insensitive' };
+    }
+
+    if (filter.search && filter.search.trim() !== '') {
+      const q = filter.search.trim();
+      where.OR = [
+        { judul: { contains: q, mode: 'insensitive' } },
+        { deskripsi: { contains: q, mode: 'insensitive' } },
+        { kategori: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    const [total, items] = await Promise.all([
+      prisma.informasiBrosur.count({ where }),
+      prisma.informasiBrosur.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    const formatDateIndo = (date: Date) => {
+      const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      };
+      return new Intl.DateTimeFormat('id-ID', options).format(new Date(date));
+    };
+
+    const dataFormatted = items.map((item, idx) => ({
+      no: skip + idx + 1,
+      id: item.id,
+      judul: item.judul,
+      kategori: item.kategori,
+      deskripsi: item.deskripsi,
+      fileUrl: item.fileUrl,
+      isActive: item.isActive,
+      statusLabel: item.isActive ? 'Aktif' : 'Nonaktif',
+      tanggalFormatted: formatDateIndo(item.createdAt),
+      createdAt: item.createdAt,
+    }));
+
+    return {
+      data: dataFormatted,
+      pagination: {
+        totalItems: total,
+        currentPage: page,
+        limit,
+        totalPages: Math.ceil(total / limit) || 1,
+      },
+    };
+  }
+
+  /**
+   * Detail 1 Informasi/Pengumuman untuk form edit Admin
+   */
+  async getInformasiDetail(id: number) {
+    const item = await prisma.informasiBrosur.findUnique({
+      where: { id },
+    });
+
+    if (!item) {
+      throw new Error(`Informasi dengan ID ${id} tidak ditemukan.`);
+    }
+
+    return item;
+  }
+
+  /**
+   * Buat Informasi / Pengumuman Baru
+   */
+  async createInformasi(data: {
+    judul: string;
+    kategori: string;
+    deskripsi?: string;
+    fileUrl?: string;
+    isActive?: boolean;
+  }) {
+    if (!data.judul || !data.kategori) {
+      throw new Error('Judul dan Kategori informasi wajib diisi.');
+    }
+
+    const created = await prisma.informasiBrosur.create({
+      data: {
+        judul: data.judul.trim(),
+        kategori: data.kategori.trim(),
+        deskripsi: data.deskripsi || null,
+        fileUrl: data.fileUrl || null,
+        isActive: data.isActive ?? true,
+      },
+    });
+
+    return {
+      success: true,
+      message: `Informasi "${created.judul}" berhasil dipublikasikan ke Portal Camaba.`,
+      data: created,
+    };
+  }
+
+  /**
+   * Update Informasi / Pengumuman yang sudah ada
+   */
+  async updateInformasi(
+    id: number,
+    data: {
+      judul?: string;
+      kategori?: string;
+      deskripsi?: string;
+      fileUrl?: string;
+      isActive?: boolean;
+    }
+  ) {
+    const existing = await prisma.informasiBrosur.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error(`Informasi dengan ID ${id} tidak ditemukan.`);
+    }
+
+    const updated = await prisma.informasiBrosur.update({
+      where: { id },
+      data: {
+        judul: data.judul !== undefined ? data.judul.trim() : existing.judul,
+        kategori: data.kategori !== undefined ? data.kategori.trim() : existing.kategori,
+        deskripsi: data.deskripsi !== undefined ? data.deskripsi : existing.deskripsi,
+        fileUrl: data.fileUrl !== undefined ? data.fileUrl : existing.fileUrl,
+        isActive: data.isActive !== undefined ? Boolean(data.isActive) : existing.isActive,
+      },
+    });
+
+    return {
+      success: true,
+      message: `Informasi ID ${id} ("${updated.judul}") berhasil diperbarui.`,
+      data: updated,
+    };
+  }
+
+  /**
+   * Toggle Aktif / Nonaktif Informasi
+   */
+  async toggleInformasiStatus(id: number, isActive?: boolean) {
+    const existing = await prisma.informasiBrosur.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error(`Informasi dengan ID ${id} tidak ditemukan.`);
+    }
+
+    const newStatus = isActive !== undefined ? isActive : !existing.isActive;
+    const updated = await prisma.informasiBrosur.update({
+      where: { id },
+      data: { isActive: newStatus },
+    });
+
+    return {
+      success: true,
+      message: `Status informasi ID ${id} berhasil diubah menjadi ${newStatus ? 'Aktif' : 'Nonaktif'}.`,
+      data: updated,
+    };
+  }
+
+  /**
+   * Hapus Informasi / Pengumuman
+   */
+  async deleteInformasi(id: number) {
+    const existing = await prisma.informasiBrosur.findUnique({ where: { id } });
+    if (!existing) {
+      throw new Error(`Informasi dengan ID ${id} tidak ditemukan.`);
+    }
+
+    await prisma.informasiBrosur.delete({ where: { id } });
+
+    return {
+      success: true,
+      message: `Informasi "${existing.judul}" berhasil dihapus dari sistem.`,
+    };
+  }
 }
 
 export const adminPengaturanService = new AdminPengaturanService();

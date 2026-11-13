@@ -160,13 +160,24 @@ model Pendaftar {
   jurusanPendidikan  String?          // Untuk grafik "Jurusan Pendidikan" (IPA / IPS / Kejuruan)
   tahunLulus         Int?             // Untuk grafik "Tahun Lulus" (2026, dst.)
   sumberTrafik       String?          // Untuk grafik "Sumber Trafik Pendaftar"
+  namaPerusahaan      String?          // Tab Perusahaan ("Asal Perusahaan Pendaftar")
+  asalPerguruanTinggi String?          // Tab Perguruan Tinggi ("Asal Perguruan Tinggi")
+  alasanMemilih       String?          // Tab Kuesioner ("Alasan Memilih UIKA")
 
-  // Field Biodata Detail (Sesuai Form Profil Camaba UIKA)
+  // Field Biodata Detail (Sesuai Form Profil Camaba UIKA Screenshot 2)
   beratBadan         Int?             // Contoh: 43
   tinggiBadan        Int?             // Contoh: 150
   suku               String?          // Contoh: "Sunda"
   agama              String?          // Contoh: "Islam"
   kebutuhanKhusus    String?          // Contoh: "Tidak"
+  nisn               String?          // Nomor Induk Siswa Nasional
+  npsn               String?          // Nomor Pokok Sekolah Nasional
+  noKk               String?          // Nomor Kartu Keluarga
+  noPaspor           String?          // Nomor Paspor (jika ada)
+  telepon            String?          // Nomor telepon rumah
+  ukuranJasAlmamater String?          // S, M, L, XL, XXL, XXXL
+  pemberiRekomendasi String?          // Guru BK, Alumni, Dosen, dll.
+  isTagihanFormulir  Boolean          @default(false)
 
   // Tahapan Funnel Penerimaan Mahasiswa Baru & Kartu Statistik
   isBiodataLengkap   Boolean          @default(false) // Tahap Funnel: "Mengisi Biodata"
@@ -225,8 +236,10 @@ model OrangTua {
   pendaftar       Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
   namaAyah        String?
   pekerjaanAyah   String?
+  pendidikanAyah  String?
   namaIbu         String?
   pekerjaanIbu    String?
+  pendidikanIbu   String?
   penghasilanOrtu String?
   noHpOrtu        String?
 }
@@ -261,4 +274,23 @@ model MataKuliahRpl {
   sksPilihan     Int          @default(0)
   sksTotal       Int          @default(0)
   statusCpmk     String       @default("Belum Terisi") // "Belum Terisi" / "Sudah Terisi"
+}
+
+// Model Leads Maukuliah (Sesuai Halaman Pendaftar -> Leads Maukuliah UIKA)
+model LeadsMaukuliah {
+  id               Int       @id @default(autoincrement())
+  namaLeads        String
+  email            String?
+  noHp             String?
+  tanggalLahir     DateTime?
+  sumberData       String    @default("Prospect") // "Prospect", "Admission", "Website UIKA", "Maukuliah"
+  status           String    @default("Belum dihubungi") // "Belum dihubungi", "Sudah dihubungi"
+  isDihubungi      Boolean   @default(false)
+  tanggalDihubungi DateTime?
+  petugasFollowUp  String?
+  catatan          String?
+  tahunMasuk       Int       @default(2026)
+  tanggalMasuk     DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }

@@ -20,4 +20,12 @@ router.get('/ukt', optionalAdminAuth, adminPengaturanController.getUkt);
 // Pengaturan Umum PMB
 router.get('/umum', optionalAdminAuth, adminPengaturanController.getUmum);
 
+// Pengaturan Informasi & Berita Portal Camaba (Screenshot 3 Informasi)
+router.get('/informasi', optionalAdminAuth, adminPengaturanController.getInformasiList);
+router.get('/informasi/:id', optionalAdminAuth, adminPengaturanController.getInformasiDetail);
+router.post('/informasi', optionalAdminAuth, adminPengaturanController.createInformasi);
+router.put('/informasi/:id', optionalAdminAuth, adminPengaturanController.updateInformasi);
+router.patch('/informasi/:id/toggle', optionalAdminAuth, adminPengaturanController.toggleInformasiStatus);
+router.delete('/informasi/:id', optionalAdminAuth, adminPengaturanController.deleteInformasi);
+
 export default router;

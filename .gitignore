@@ -1,9 +1,8 @@
-    node_modules/
-    dist/
-    .env
-    .agents/
-    .claude/
-    .windsurf/
-    skills-lock.json
-    *.log
-node_modules
+node_modules/
+dist/
+.env
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+*.log

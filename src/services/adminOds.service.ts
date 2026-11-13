@@ -2,6 +2,11 @@ import prisma from '../config/database';
 
 export interface FilterOds {
   periodeId?: number;
+  periodeIds?: number[];
+  programStudiId?: number;
+  programStudiIds?: number[];
+  jalurPendaftaranId?: number;
+  jalurPendaftaranIds?: number[];
   statusOds?: string;
   isOdsDihubungi?: boolean;
   search?: string;
@@ -20,7 +25,33 @@ export class AdminOdsService {
 
     const where: any = {};
 
-    if (filter.periodeId) where.periodeId = Number(filter.periodeId);
+    if (filter.periodeIds && filter.periodeIds.length > 0) {
+      where.periodeId = { in: filter.periodeIds };
+    } else if (filter.periodeId) {
+      where.periodeId = Number(filter.periodeId);
+    }
+
+    if (filter.programStudiIds && filter.programStudiIds.length > 0) {
+      where.OR = [
+        { programStudiId: { in: filter.programStudiIds } },
+        { pilihanProdi2Id: { in: filter.programStudiIds } },
+        { pilihanProdi3Id: { in: filter.programStudiIds } },
+      ];
+    } else if (filter.programStudiId) {
+      const pid = Number(filter.programStudiId);
+      where.OR = [
+        { programStudiId: pid },
+        { pilihanProdi2Id: pid },
+        { pilihanProdi3Id: pid },
+      ];
+    }
+
+    if (filter.jalurPendaftaranIds && filter.jalurPendaftaranIds.length > 0) {
+      where.jalurPendaftaranId = { in: filter.jalurPendaftaranIds };
+    } else if (filter.jalurPendaftaranId) {
+      where.jalurPendaftaranId = Number(filter.jalurPendaftaranId);
+    }
+
     if (filter.statusOds && filter.statusOds !== 'all') {
       where.statusOds = filter.statusOds;
     }

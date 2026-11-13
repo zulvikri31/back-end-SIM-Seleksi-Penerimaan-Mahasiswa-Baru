@@ -54,9 +54,9 @@ export class AdminLaporanService {
         jalur: p.jalurPendaftaran.nama,
         gelombang: p.gelombang.nama,
         sistemKuliah: p.sistemKuliah.nama,
-        kelompokUkt: p.kelompokUkt || (p.isKip ? 'KIP-Kuliah' : 'UKT 2'),
-        nominalUkt: p.nominalUkt || (p.isKip ? 0 : 3500000),
-        penghasilanOrtu: p.orangTua?.penghasilanOrtu || 'Rp 2.000.000 - Rp 4.000.000',
+        kelompokUkt: p.kelompokUkt || (p.isKip ? 'KIP-Kuliah' : '-'),
+        nominalUkt: p.nominalUkt || 0,
+        penghasilanOrtu: p.orangTua?.penghasilanOrtu || '-',
         pekerjaanAyah: p.orangTua?.pekerjaanAyah || '-',
         statusDaftarUlang: p.isDaftarUlang ? 'Lunas / Terdaftar' : 'Belum Bayar',
       };
