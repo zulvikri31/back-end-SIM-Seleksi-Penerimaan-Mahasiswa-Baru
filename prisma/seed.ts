@@ -73,60 +73,59 @@ async function main() {
     }
   }
 
-  // 6. Data Master Program Studi Resmi Universitas Ibn Khaldun (UIKA) Bogor
+  // 6. Data Master Program Studi Resmi Universitas Ibn Khaldun (UIKA) Bogor (38 Program Studi)
   const prodiList = [
-    // 1. D4 (Sarjana Terapan) - FEB
-    { namaProdi: 'Perbankan dan Keuangan Digital (Sarjana Terapan)', jenjang: 'D4', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik', biayaKuliah: 4200000 },
-
-    // 2. S1 - Fakultas Agama Islam (FAI)
-    { namaProdi: 'Pendidikan Agama Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 4000000 },
-    { namaProdi: 'Hukum Keluarga Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3800000 },
-    { namaProdi: 'Ekonomi Syariah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 4200000 },
-    { namaProdi: 'Komunikasi dan Penyiaran Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3900000 },
-    { namaProdi: 'Pendidikan Guru Madrasah Ibtidaiyah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3900000 },
-    { namaProdi: 'Bimbingan dan Konseling Pendidikan Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik Sekali', biayaKuliah: 3800000 },
-    { namaProdi: 'Manajemen Haji dan Umrah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik', biayaKuliah: 4000000 },
-    { namaProdi: 'Ilmu Al-Qur\'an dan Tafsir', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik Sekali', biayaKuliah: 3800000 },
-
-    // 3. S1 - Fakultas Ekonomi dan Bisnis (FEB)
-    { namaProdi: 'Manajemen', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Unggul', biayaKuliah: 5000000 },
-    { namaProdi: 'Akuntansi', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Unggul', biayaKuliah: 4800000 },
-    { namaProdi: 'Bisnis Digital', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
-    { namaProdi: 'Perdagangan Internasional', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik', biayaKuliah: 4800000 },
-
-    // 4. S1 - Fakultas Teknik dan Sains (FTS)
-    { namaProdi: 'Teknik Sipil', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'A', biayaKuliah: 5200000 },
-    { namaProdi: 'Teknik Mesin', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'A', biayaKuliah: 5200000 },
-    { namaProdi: 'Teknik Elektro', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
-    { namaProdi: 'Teknik Informatika', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Unggul', biayaKuliah: 5500000 },
-    { namaProdi: 'Sistem Informasi', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
-    { namaProdi: 'Rekayasa Pertanian dan Biosistem', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik', biayaKuliah: 4600000 },
-    { namaProdi: 'Ilmu Lingkungan', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik', biayaKuliah: 4600000 },
-
-    // 5. S1 & Profesi - Fakultas Keguruan dan Ilmu Pendidikan (FKIP)
+    // 1. Fakultas Keguruan dan Ilmu Pendidikan (FKIP) - 6 Prodi
+    { namaProdi: 'Pendidikan Vokasional Desain Fashion', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'Baik Sekali', biayaKuliah: 4800000 },
+    { namaProdi: 'Pendidikan Matematika', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'A', biayaKuliah: 4200000 },
     { namaProdi: 'Teknologi Pendidikan', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'A', biayaKuliah: 4500000 },
     { namaProdi: 'Pendidikan Masyarakat', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'A', biayaKuliah: 4000000 },
-    { namaProdi: 'Pendidikan Bahasa Inggris', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'Unggul', biayaKuliah: 4300000 },
-    { namaProdi: 'Pendidikan Matematika', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'A', biayaKuliah: 4200000 },
-    { namaProdi: 'Pendidikan Vokasional Desain Fashion', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'Baik Sekali', biayaKuliah: 4800000 },
     { namaProdi: 'Pendidikan Profesi Guru', jenjang: 'Prof', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'Unggul', biayaKuliah: 5000000 },
+    { namaProdi: 'Pendidikan Bahasa Inggris', jenjang: 'S1', fakultas: 'Fakultas Keguruan dan Ilmu Pendidikan', akreditasi: 'Unggul', biayaKuliah: 4300000 },
 
-    // 6. S1 & S2 - Fakultas Hukum (FH)
-    { namaProdi: 'Ilmu Hukum', jenjang: 'S1', fakultas: 'Fakultas Hukum', akreditasi: 'Unggul', biayaKuliah: 4800000 },
+    // 2. Fakultas Hukum (FH) - 2 Prodi
     { namaProdi: 'Hukum Bisnis (S2)', jenjang: 'S2', fakultas: 'Fakultas Hukum', akreditasi: 'Unggul', biayaKuliah: 7500000 },
+    { namaProdi: 'Ilmu Hukum', jenjang: 'S1', fakultas: 'Fakultas Hukum', akreditasi: 'Unggul', biayaKuliah: 4800000 },
 
-    // 7. S1 - Fakultas Ilmu Kesehatan (FIKES)
+    // 3. Fakultas Ekonomi dan Bisnis (FEB) - 5 Prodi
+    { namaProdi: 'Manajemen', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Unggul', biayaKuliah: 5000000 },
+    { namaProdi: 'Bisnis Digital', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
+    { namaProdi: 'Perbankan dan Keuangan Digital (Sarjana Terapan)', jenjang: 'D4', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik', biayaKuliah: 4200000 },
+    { namaProdi: 'Akuntansi', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Unggul', biayaKuliah: 4800000 },
+    { namaProdi: 'Perdagangan Internasional', jenjang: 'S1', fakultas: 'Fakultas Ekonomi dan Bisnis', akreditasi: 'Baik', biayaKuliah: 4800000 },
+
+    // 4. Fakultas Agama Islam (FAI) - 9 Prodi
+    { namaProdi: 'Ekonomi Syariah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 4200000 },
+    { namaProdi: 'Manajemen Haji dan Umrah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik', biayaKuliah: 4000000 },
+    { namaProdi: 'Bimbingan dan Konseling Pendidikan Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik Sekali', biayaKuliah: 3800000 },
+    { namaProdi: 'Komunikasi dan Penyiaran Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3900000 },
+    { namaProdi: 'Hukum Keluarga Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3800000 },
+    { namaProdi: 'Hukum Keluarga Islam (Nunggu Migrasi)', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3800000 },
+    { namaProdi: 'Ilmu Al-Qur\'an dan Tafsir', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik Sekali', biayaKuliah: 3800000 },
+    { namaProdi: 'Pendidikan Agama Islam', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 4000000 },
+    { namaProdi: 'Pendidikan Guru Madrasah Ibtidaiyah', jenjang: 'S1', fakultas: 'Fakultas Agama Islam', akreditasi: 'A', biayaKuliah: 3900000 },
+
+    // 5. Fakultas Teknik dan Sains (FTS) - 7 Prodi
+    { namaProdi: 'Teknik Elektro', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
+    { namaProdi: 'Teknik Mesin', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'A', biayaKuliah: 5200000 },
+    { namaProdi: 'Teknik Sipil', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'A', biayaKuliah: 5200000 },
+    { namaProdi: 'Ilmu Lingkungan', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik', biayaKuliah: 4600000 },
+    { namaProdi: 'Rekayasa Pertanian dan Biosistem', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik', biayaKuliah: 4600000 },
+    { namaProdi: 'Teknik Informatika', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Unggul', biayaKuliah: 5500000 },
+    { namaProdi: 'Sistem Informasi', jenjang: 'S1', fakultas: 'Fakultas Teknik dan Sains', akreditasi: 'Baik Sekali', biayaKuliah: 5200000 },
+
+    // 6. Sekolah Pascasarjana - 7 Prodi
+    { namaProdi: 'Ekonomi Syariah (S3)', jenjang: 'S3', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 12500000 },
+    { namaProdi: 'Ekonomi Syariah (S2)', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 7200000 },
+    { namaProdi: 'Manajemen (S2)', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Baik Sekali', biayaKuliah: 8000000 },
+    { namaProdi: 'Komunikasi dan Penyiaran islam (S2)', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Baik Sekali', biayaKuliah: 7000000 },
+    { namaProdi: 'Pendidikan Agama Islam (S3)', jenjang: 'S3', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 12000000 },
+    { namaProdi: 'Teknologi Pendidikan (S2)', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 7500000 },
+    { namaProdi: 'Pendidikan Agama Islam (S2)', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 7000000 },
+
+    // 7. Fakultas Ilmu Kesehatan (FIKES) - 2 Prodi
     { namaProdi: 'Kesehatan Masyarakat', jenjang: 'S1', fakultas: 'Fakultas Ilmu Kesehatan', akreditasi: 'A', biayaKuliah: 4800000 },
     { namaProdi: 'Gizi', jenjang: 'S1', fakultas: 'Fakultas Ilmu Kesehatan', akreditasi: 'Baik Sekali', biayaKuliah: 5000000 },
-
-    // 8. Pascasarjana (S2 & S3)
-    { namaProdi: 'Magister Pendidikan Agama Islam', jenjang: 'S2', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 7000000 },
-    { namaProdi: 'Magister Ekonomi Syariah', jenjang: 'S2', fakultas: 'Fakultas Agama Islam', akreditasi: 'Unggul', biayaKuliah: 7200000 },
-    { namaProdi: 'Magister Komunikasi dan Penyiaran Islam', jenjang: 'S2', fakultas: 'Fakultas Agama Islam', akreditasi: 'Baik Sekali', biayaKuliah: 7000000 },
-    { namaProdi: 'Magister Teknologi Pendidikan', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 7500000 },
-    { namaProdi: 'Magister Manajemen', jenjang: 'S2', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Baik Sekali', biayaKuliah: 8000000 },
-    { namaProdi: 'Doktor Pendidikan Agama Islam', jenjang: 'S3', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 12000000 },
-    { namaProdi: 'Doktor Ekonomi Syariah', jenjang: 'S3', fakultas: 'Sekolah Pascasarjana', akreditasi: 'Unggul', biayaKuliah: 12500000 },
   ];
 
   for (const pr of prodiList) {
@@ -619,7 +618,340 @@ async function main() {
     });
   }
 
-  console.log('✅ Seeding selesai sukses 100%! Semua data kelulusan, referensi, laporan, pengaturan, seleksi, dan Login As telah tersedia.');
+  // 17. Seed Pendaftar ODS UIKA (Adithia Hermawan - Sesuai Screenshot SEVIMA UIKA)
+  const emailAdithia = 'adithiahermawan2025@gmail.com';
+  const defaultAdithiaPass = await bcrypt.hash('Password123!', 10);
+  const userAdithia = await prisma.user.upsert({
+    where: { email: emailAdithia },
+    update: {},
+    create: {
+      nama: 'ADITHIA HERMAWAN',
+      email: emailAdithia,
+      password: defaultAdithiaPass,
+      role: 'CAMABA',
+      isActive: true,
+    },
+  });
+
+  const pPeriode2026Genap = await prisma.periode.findFirst({ where: { kode: '20262' } });
+  const gel1Ods = await prisma.gelombang.findFirst({ where: { nama: 'Gelombang 1' } });
+  const jPasca = await prisma.jalurPendaftaran.findFirst({ where: { nama: { contains: 'PASCASARJANA' } } });
+  const sReg = await prisma.sistemKuliah.findFirst({ where: { nama: 'Reguler' } });
+  const prodiTekPenS2 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Teknologi Pendidikan' }, jenjang: 'S2' } });
+  const prodiManajemenS2 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Manajemen' }, jenjang: 'S2' } });
+  const prodiPaiS2 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Pendidikan Agama Islam' }, jenjang: 'S2' } });
+
+  const pendaftarAdithia = await prisma.pendaftar.upsert({
+    where: { userId: userAdithia.id },
+    update: {
+      noPendaftaran: '410120001',
+      nik: '3271063007990008',
+      jenisKelamin: 'Laki-laki',
+      noHp: '08388400876',
+      asalPerguruanTinggi: 'Universitas Ibn Khaldun Bogor',
+      jurusanPendidikan: '-',
+      periodeId: pPeriode2026Genap?.id || 1,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jPasca?.id || 1,
+      sistemKuliahId: sReg?.id || 1,
+      programStudiId: prodiTekPenS2?.id || 1,
+      pilihanProdi2Id: prodiManajemenS2?.id || null,
+      pilihanProdi3Id: prodiPaiS2?.id || null,
+      statusOds: 'PENDAFTAR',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+    },
+    create: {
+      userId: userAdithia.id,
+      noPendaftaran: '410120001',
+      nik: '3271063007990008',
+      jenisKelamin: 'Laki-laki',
+      noHp: '08388400876',
+      asalPerguruanTinggi: 'Universitas Ibn Khaldun Bogor',
+      jurusanPendidikan: '-',
+      periodeId: pPeriode2026Genap?.id || 1,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jPasca?.id || 1,
+      sistemKuliahId: sReg?.id || 1,
+      programStudiId: prodiTekPenS2?.id || 1,
+      pilihanProdi2Id: prodiManajemenS2?.id || null,
+      pilihanProdi3Id: prodiPaiS2?.id || null,
+      statusOds: 'PENDAFTAR',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+    },
+  });
+
+  await prisma.berkasPendaftar.deleteMany({ where: { pendaftarId: pendaftarAdithia.id } });
+  await prisma.berkasPendaftar.createMany({
+    data: [
+      {
+        pendaftarId: pendaftarAdithia.id,
+        jenisBerkas: 'KTP',
+        namaBerkas: 'KTP',
+        fileUrl: '/uploads/camaba/410120001 - KTP.jpeg',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: true,
+      },
+      {
+        pendaftarId: pendaftarAdithia.id,
+        jenisBerkas: 'IJAZAH_S1',
+        namaBerkas: 'Scan Ijazah S1',
+        fileUrl: '/uploads/camaba/410120001 - IJZ_S1.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: true,
+      },
+      {
+        pendaftarId: pendaftarAdithia.id,
+        jenisBerkas: 'KARTU_KELUARGA',
+        namaBerkas: 'Kartu Keluarga',
+        fileUrl: '/uploads/camaba/410120001 - KK.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: false,
+      },
+      {
+        pendaftarId: pendaftarAdithia.id,
+        jenisBerkas: 'TRANSKRIP_NILAI',
+        namaBerkas: 'Scan Transkrip Nilai S1 yang telah dilegalisir',
+        fileUrl: '/uploads/camaba/Transkrip_Adithia Hermawan.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: false,
+      },
+    ],
+  });
+
+  // 18. Seed Pendaftar ODS UIKA (ELIN TRESNIARTI - Sesuai Screenshot Modal Verifikasi & Detail Biodata)
+  const emailElin = 'tresniartie@gmail.com';
+  const userElin = await prisma.user.upsert({
+    where: { email: emailElin },
+    update: {
+      nama: 'ELIN TRESNIARTI',
+      role: 'CAMABA',
+      isActive: true,
+    },
+    create: {
+      nama: 'ELIN TRESNIARTI',
+      email: emailElin,
+      password: defaultAdithiaPass,
+      role: 'CAMABA',
+      isActive: true,
+    },
+  });
+
+  const pPeriode2026Ganjil = await prisma.periode.findFirst({ where: { kode: '20261' } });
+  const sKaryawan = await prisma.sistemKuliah.findFirst({ where: { nama: { contains: 'Karyawan' } } });
+  const prodiEksyarS2 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Ekonomi Syariah' }, jenjang: 'S2' } });
+  const prodiHukumBisnisS2 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Hukum Bisnis' }, jenjang: 'S2' } });
+
+  const pendaftarElin = await prisma.pendaftar.upsert({
+    where: { userId: userElin.id },
+    update: {
+      noPendaftaran: '4101260672',
+      nim: '262101030007',
+      nik: '3271035601850009',
+      noKk: '327104108130010',
+      jenisKelamin: 'Perempuan',
+      tempatLahir: 'BOGOR',
+      tanggalLahir: new Date('1985-01-16T00:00:00.000Z'),
+      noHp: '081804924348',
+      agama: 'Islam',
+      pekerjaan: 'PNS',
+      namaPerusahaan: 'Kementerian Agama RI',
+      ukuranJasAlmamater: 'L',
+      periodeId: pPeriode2026Ganjil?.id || 3,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jPasca?.id || 16,
+      sistemKuliahId: sKaryawan?.id || 2,
+      programStudiId: prodiManajemenS2?.id || 16,
+      pilihanProdi2Id: prodiEksyarS2?.id || 39,
+      pilihanProdi3Id: prodiHukumBisnisS2?.id || 36,
+      prodiDiterimaId: prodiManajemenS2?.id || 16,
+      statusOds: 'PENDAFTAR',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+      createdAt: new Date('2026-06-01T22:47:59.000Z'),
+    },
+    create: {
+      userId: userElin.id,
+      noPendaftaran: '4101260672',
+      nim: '262101030007',
+      nik: '3271035601850009',
+      noKk: '327104108130010',
+      jenisKelamin: 'Perempuan',
+      tempatLahir: 'BOGOR',
+      tanggalLahir: new Date('1985-01-16T00:00:00.000Z'),
+      noHp: '081804924348',
+      agama: 'Islam',
+      pekerjaan: 'PNS',
+      namaPerusahaan: 'Kementerian Agama RI',
+      ukuranJasAlmamater: 'L',
+      periodeId: pPeriode2026Ganjil?.id || 3,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jPasca?.id || 16,
+      sistemKuliahId: sKaryawan?.id || 2,
+      programStudiId: prodiManajemenS2?.id || 16,
+      pilihanProdi2Id: prodiEksyarS2?.id || 39,
+      pilihanProdi3Id: prodiHukumBisnisS2?.id || 36,
+      prodiDiterimaId: prodiManajemenS2?.id || 16,
+      statusOds: 'PENDAFTAR',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+      createdAt: new Date('2026-06-01T22:47:59.000Z'),
+    },
+  });
+
+  await prisma.berkasPendaftar.deleteMany({ where: { pendaftarId: pendaftarElin.id } });
+  await prisma.berkasPendaftar.createMany({
+    data: [
+      {
+        pendaftarId: pendaftarElin.id,
+        jenisBerkas: 'KTP',
+        namaBerkas: 'KTP',
+        fileUrl: '/uploads/camaba/4101260672 - KTP.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: true,
+      },
+      {
+        pendaftarId: pendaftarElin.id,
+        jenisBerkas: 'IJAZAH_S1',
+        namaBerkas: 'Scan Ijazah S1',
+        fileUrl: '/uploads/camaba/4101260672 - IJZ_S1.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: true,
+      },
+      {
+        pendaftarId: pendaftarElin.id,
+        jenisBerkas: 'KARTU_KELUARGA',
+        namaBerkas: 'Kartu Keluarga',
+        fileUrl: '/uploads/camaba/4101260672 - KK.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: false,
+      },
+      {
+        pendaftarId: pendaftarElin.id,
+        jenisBerkas: 'PASFOTO',
+        namaBerkas: 'Pasfoto Formal Warna Terbaru (Tidak Selfie)',
+        fileUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: false,
+      },
+      {
+        pendaftarId: pendaftarElin.id,
+        jenisBerkas: 'TRANSKRIP_NILAI',
+        namaBerkas: 'Scan Transkrip Nilai S1 yang telah dilegalisir',
+        fileUrl: '/uploads/camaba/transkrip nilai.pdf',
+        statusVerifikasi: 'DIPROSES',
+        isWajib: false,
+      },
+    ],
+  });
+
+  // 19. Seed Pendaftar ODS UIKA (R. SYAFILDA RAHMADIANTI ZAHRA - Sesuai Screenshot Tab Daftar Ulang & Detail Biodata)
+  let jalurMandiriS1 = await prisma.jalurPendaftaran.findFirst({ where: { nama: 'SELEKSI MANDIRI' } });
+  if (!jalurMandiriS1) {
+    jalurMandiriS1 = await prisma.jalurPendaftaran.create({
+      data: {
+        nama: 'SELEKSI MANDIRI',
+        deskripsi: 'Jalur Seleksi Mandiri Universitas Ibn Khaldun Bogor',
+      },
+    });
+  }
+
+  const prodiKpiS1 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Komunikasi dan Penyiaran' }, jenjang: 'S1' } });
+  const prodiMhuS1 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Manajemen Haji' }, jenjang: 'S1' } });
+  const prodiBkpiS1 = await prisma.programStudi.findFirst({ where: { namaProdi: { contains: 'Bimbingan dan Konseling' }, jenjang: 'S1' } });
+
+  const emailSyafilda = 'syifaraden@gmail.com';
+  const userSyafilda = await prisma.user.upsert({
+    where: { email: emailSyafilda },
+    update: {
+      nama: 'R. SYAFILDA RAHMADIANTI ZAHRA',
+      role: 'CAMABA',
+      isActive: true,
+    },
+    create: {
+      nama: 'R. SYAFILDA RAHMADIANTI ZAHRA',
+      email: emailSyafilda,
+      password: defaultAdithiaPass,
+      role: 'CAMABA',
+      isActive: true,
+    },
+  });
+
+  await prisma.pendaftar.upsert({
+    where: { userId: userSyafilda.id },
+    update: {
+      noPendaftaran: '4101260049',
+      nik: '3201124711050002',
+      noKk: '3201120409120012',
+      jenisKelamin: 'Perempuan',
+      tempatLahir: 'BOGOR',
+      tanggalLahir: new Date('2005-11-07T00:00:00.000Z'),
+      noHp: '085155162789',
+      agama: 'Islam',
+      pekerjaan: 'Tidak Bekerja',
+      namaPerusahaan: null,
+      asalSekolah: 'Muadalah Sulaimaniyah',
+      jurusanPendidikan: 'TAHFIDZ',
+      ukuranJasAlmamater: 'M',
+      periodeId: pPeriode2026Ganjil?.id || 3,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jalurMandiriS1.id,
+      sistemKuliahId: sReg?.id || 1,
+      programStudiId: prodiKpiS1?.id || 11,
+      pilihanProdi2Id: prodiMhuS1?.id || 26,
+      pilihanProdi3Id: prodiBkpiS1?.id || 25,
+      prodiDiterimaId: prodiKpiS1?.id || 11,
+      statusKelulusan: 'LULUS',
+      isDiterima: true,
+      statusOds: 'DAFTAR_ULANG',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+      isDaftarUlang: false,
+      nim: null,
+      createdAt: new Date('2026-01-28T17:49:35.000Z'),
+    },
+    create: {
+      userId: userSyafilda.id,
+      noPendaftaran: '4101260049',
+      nik: '3201124711050002',
+      noKk: '3201120409120012',
+      jenisKelamin: 'Perempuan',
+      tempatLahir: 'BOGOR',
+      tanggalLahir: new Date('2005-11-07T00:00:00.000Z'),
+      noHp: '085155162789',
+      agama: 'Islam',
+      pekerjaan: 'Tidak Bekerja',
+      namaPerusahaan: null,
+      asalSekolah: 'Muadalah Sulaimaniyah',
+      jurusanPendidikan: 'TAHFIDZ',
+      ukuranJasAlmamater: 'M',
+      periodeId: pPeriode2026Ganjil?.id || 3,
+      gelombangId: gel1Ods?.id || 1,
+      jalurPendaftaranId: jalurMandiriS1.id,
+      sistemKuliahId: sReg?.id || 1,
+      programStudiId: prodiKpiS1?.id || 11,
+      pilihanProdi2Id: prodiMhuS1?.id || 26,
+      pilihanProdi3Id: prodiBkpiS1?.id || 25,
+      prodiDiterimaId: prodiKpiS1?.id || 11,
+      statusKelulusan: 'LULUS',
+      isDiterima: true,
+      statusOds: 'DAFTAR_ULANG',
+      statusVerifikasiBerkas: 'PERLU_DIVERIFIKASI',
+      isFinalisasi: true,
+      isBiodataLengkap: true,
+      isDaftarUlang: false,
+      nim: null,
+      createdAt: new Date('2026-01-28T17:49:35.000Z'),
+    },
+  });
+
+  console.log('✅ Seeding selesai sukses 100%! Semua data kelulusan, referensi, laporan, pengaturan, seleksi, ODS, dan Login As telah tersedia.');
 }
 
 main()

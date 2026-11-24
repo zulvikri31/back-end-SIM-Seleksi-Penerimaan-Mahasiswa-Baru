@@ -14,3 +14,4 @@ router.post('/login', authController.login);
 router.get('/me', verifyToken, authController.getProfile);
 
 export default router;
+

@@ -23,8 +23,16 @@ export class AuthController {
 
   async login(req: Request, res: Response): Promise<void> {
     try {
-      const { email, password, identifier, idPendaftar, pin } = req.body;
-      const result = await authService.login({ email, password, identifier, idPendaftar, pin });
+      const { email, password, identifier, idPendaftar, pin, role, expectedRole } = req.body;
+      const result = await authService.login({
+        email,
+        password,
+        identifier,
+        idPendaftar,
+        pin,
+        role: role || expectedRole,
+        expectedRole: expectedRole || role,
+      });
 
       res.status(200).json({
         success: true,

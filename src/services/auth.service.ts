@@ -14,6 +14,8 @@ export interface LoginDTO {
   identifier?: string;
   password?: string;
   pin?: string;
+  role?: string;
+  expectedRole?: string;
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_fallback_key';
@@ -116,7 +118,19 @@ export class AuthService {
       throw new Error('ID Pendaftar / Email atau PIN / Password tidak sesuai.');
     }
 
-    // 4. Generate JWT Token
+    // 4. Validasi Role Khusus (mencegah Camaba masuk ke halaman login Admin, atau sebaliknya)
+    const targetRole = (data.expectedRole || data.role)?.toUpperCase().trim();
+    if (targetRole && targetRole !== user.role.toUpperCase()) {
+      if (targetRole === 'ADMIN' && user.role === 'CAMABA') {
+        throw new Error('Akses ditolak. Halaman ini khusus Administrator SPMB. Calon mahasiswa silakan masuk melalui portal pendaftaran.');
+      } else if (targetRole === 'CAMABA' && user.role === 'ADMIN') {
+        throw new Error('Akses ditolak. Akun Administrator silakan masuk melalui halaman login Admin.');
+      } else {
+        throw new Error(`Akses ditolak. Akun Anda tidak memiliki hak akses sebagai ${targetRole}.`);
+      }
+    }
+
+    // 5. Generate JWT Token
     const token = jwt.sign(
       {
         id: user.id,

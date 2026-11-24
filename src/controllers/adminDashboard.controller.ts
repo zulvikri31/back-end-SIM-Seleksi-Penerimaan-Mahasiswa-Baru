@@ -149,8 +149,9 @@ export class AdminDashboardController {
 
   async getUnitTree(req: Request, res: Response): Promise<void> {
     try {
-      const { search } = req.query;
-      const result = await adminDashboardService.getUnitTree(search ? String(search) : undefined);
+      const { search, format, tree } = req.query;
+      const formatMode = format ? String(format) : tree === 'true' ? 'tree' : undefined;
+      const result = await adminDashboardService.getUnitTree(search ? String(search) : undefined, formatMode);
 
       res.status(200).json({
         success: true,

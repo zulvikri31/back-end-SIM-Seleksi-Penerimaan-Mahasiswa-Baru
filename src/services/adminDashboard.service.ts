@@ -991,7 +991,7 @@ export class AdminDashboardService {
   /**
    * Mengambil struktur hierarki Unit / Program Studi (Universitas -> Fakultas -> Program Studi)
    */
-  async getUnitTree(search?: string) {
+  async getUnitTree(search?: string, format?: string) {
     const where: any = {};
     if (search && search.trim() !== '') {
       const q = search.trim();
@@ -1007,26 +1007,74 @@ export class AdminDashboardService {
       orderBy: [{ fakultas: 'asc' }, { jenjang: 'asc' }, { namaProdi: 'asc' }],
     });
 
+    const urutanFakultas = [
+      'Fakultas Keguruan dan Ilmu Pendidikan',
+      'Fakultas Hukum',
+      'Fakultas Ekonomi dan Bisnis',
+      'Fakultas Agama Islam',
+      'Fakultas Teknik dan Sains',
+      'Sekolah Pascasarjana',
+      'Fakultas Ilmu Kesehatan',
+    ];
+
     const fakultasMap = new Map<string, any[]>();
     for (const p of prodis) {
-      const fak = p.fakultas || 'Universitas Ibn Khaldun (UIKA)';
+      const fak = p.fakultas || 'Universitas Ibn Khaldun';
       if (!fakultasMap.has(fak)) {
         fakultasMap.set(fak, []);
       }
       fakultasMap.get(fak)!.push({
         id: p.id,
+        key: p.id,
+        value: p.id,
         namaProdi: p.namaProdi,
         jenjang: p.jenjang,
         label: `${p.jenjang} - ${p.namaProdi}`,
         akreditasi: p.akreditasi,
+        fakultas: fak,
       });
     }
 
-    return Array.from(fakultasMap.entries()).map(([fakultas, prodiList]) => ({
+    // Urutkan fakultas sesuai urutan resmi UIKA pada screenshot UI
+    const sortedEntries = Array.from(fakultasMap.entries()).sort((a, b) => {
+      const idxA = urutanFakultas.indexOf(a[0]);
+      const idxB = urutanFakultas.indexOf(b[0]);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a[0].localeCompare(b[0]);
+    });
+
+    const fakultasList = sortedEntries.map(([fakultas, prodiList], idx) => ({
+      id: `fak-${idx + 1}`,
+      key: `fak-${idx + 1}`,
+      value: `fak-${idx + 1}`,
+      nama: fakultas,
+      label: fakultas,
       fakultas,
       totalProdi: prodiList.length,
       prodi: prodiList,
+      children: prodiList,
     }));
+
+    // Jika parameter ?format=root atau ?tree=true dikirim oleh FE, bungkus dalam root 'Universitas Ibn Khaldun'
+    if (format === 'root' || format === 'tree') {
+      return [
+        {
+          id: 'uika-root',
+          key: 'uika-root',
+          value: 'uika-root',
+          nama: 'Universitas Ibn Khaldun',
+          label: 'Universitas Ibn Khaldun',
+          institusi: 'Universitas Ibn Khaldun',
+          totalFakultas: fakultasList.length,
+          totalProdi: prodis.length,
+          children: fakultasList,
+        },
+      ];
+    }
+
+    return fakultasList;
   }
 
   /**

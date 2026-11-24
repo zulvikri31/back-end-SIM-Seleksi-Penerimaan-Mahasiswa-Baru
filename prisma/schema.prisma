@@ -145,6 +145,8 @@ model Pendaftar {
   statusOds          String           @default("PEMINAT")          // PEMINAT, PENDAFTAR, PESERTA_SELEKSI, DAFTAR_ULANG
   isOdsDihubungi     Boolean          @default(false)              // false: Belum Dihubungi, true: Sudah Dihubungi
   catatanOds         String?
+  statusVerifikasiBerkas String?      @default("PERLU_DIVERIFIKASI") // PERLU_DIVERIFIKASI, TERVERIFIKASI, PERLU_PERBAIKAN, DITOLAK
+  tanggalVerifikasiBerkas DateTime?
 
   // Data Biodata, Wilayah, Pendidikan, & Sumber Trafik (Untuk Pie Chart & Tab Bawah)
   nik                String?
@@ -160,7 +162,8 @@ model Pendaftar {
   jurusanPendidikan  String?          // Untuk grafik "Jurusan Pendidikan" (IPA / IPS / Kejuruan)
   tahunLulus         Int?             // Untuk grafik "Tahun Lulus" (2026, dst.)
   sumberTrafik       String?          // Untuk grafik "Sumber Trafik Pendaftar"
-  namaPerusahaan      String?          // Tab Perusahaan ("Asal Perusahaan Pendaftar")
+  pekerjaan          String?          // "PNS", "Karyawan Swasta", "Wirausaha", dll.
+  namaPerusahaan      String?          // Tab Perusahaan / Instansi Pekerjaan ("Kementerian Agama RI")
   asalPerguruanTinggi String?          // Tab Perguruan Tinggi ("Asal Perguruan Tinggi")
   alasanMemilih       String?          // Tab Kuesioner ("Alasan Memilih UIKA")
 
@@ -249,18 +252,29 @@ model BerkasPendaftar {
   pendaftarId      Int
   pendaftar        Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
   jenisBerkas      String
+  namaBerkas       String?
   fileUrl          String
   statusVerifikasi String    @default("MENUNGGU")
+  catatan          String?
+  isWajib          Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
 }
 
 model NilaiSeleksi {
-  id          Int       @id @default(autoincrement())
-  pendaftarId Int
-  pendaftar   Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
-  jenisTes    String
-  nilai       Float     @default(0)
-  lulusTes    Boolean   @default(false)
-  catatan     String?
+  id                 Int       @id @default(autoincrement())
+  pendaftarId        Int
+  pendaftar          Pendaftar @relation(fields: [pendaftarId], references: [id], onDelete: Cascade)
+  jenisTes           String
+  komposisi          String?
+  nilai              Float     @default(0)
+  nilaiAkhir         Float?
+  dokumenUrl         String?
+  statusKelulusanTes String?   @default("DIPROSES") // DIPROSES, LULUS, TIDAK_LULUS
+  lulusTes           Boolean   @default(false)
+  catatan            String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
 }
 
 model MataKuliahRpl {
